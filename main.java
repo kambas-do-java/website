@@ -1,5 +1,3 @@
-import module java.base;
-
 void main() throws Exception {
   Path postsDir = Paths.get("posts");
   Path eventsDir = Paths.get("events");

@@ -14,11 +14,11 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v2
       with:
-        java-version: '25'
+        java-version: '24'
         distribution: 'adopt'
 
     - name: Run Generator
-      run: java main.java
+      run: ./run.sh
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
