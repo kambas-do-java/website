@@ -18,6 +18,9 @@ jobs:
         distribution: 'adopt'
 
     - name: Run Generator
+      run: chmod +x run.sh
+    
+    - name: Run Generator
       run: ./run.sh
 
     - name: Deploy to GitHub Pages
