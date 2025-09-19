@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="${page_description}">
+    <meta name="keywords" content="java, luanda, angola, desenvolvedores, programação, jug, kambas">
+    <meta name="author" content="Kambas do Java">
+    <title>${page_title}</title>
+    <link rel="stylesheet" href="${base_path}assets/css/style.css">
+    <link rel="icon" href="${base_path}assets/images/favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="logo">
+          <a href="${base_path}index.html">
+            <img src="${base_path}assets/images/logo.png" alt="Kambas do Java">
+            <span>Kambas do Java</span>
+          </a>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="${base_path}index.html">Início</a></li>
+            <li><a href="${base_path}all-posts.html">Artigos</a></li>
+            <li><a href="${base_path}index.html#events">Eventos</a></li>
+            <li><a href="${base_path}index.html#about">Sobre</a></li>
+            <li><a href="${base_path}index.html#contact">Contato</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      ${page_content}
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>Kambas do Java</h3>
+            <p>Comunidade de desenvolvedores Java de Luanda, Angola</p>
+          </div>
+          <div class="footer-section">
+            <h3>Conecte-se</h3>
+            <div class="social-links">
+              <a href="https://youtube.com/kambasdojava" target="_blank">YouTube</a>
+              <a href="https://linkedin.com/company/kambasdojava" target="_blank">LinkedIn</a>
+              <a href="https://discord.gg/kambasdojava" target="_blank">Discord</a>
+              <a href="https://github.com/kambasdojava" target="_blank">GitHub</a>
+            </div>
+          </div>
+          <div class="footer-section">
+            <h3>Links Úteis</h3>
+            <ul>
+              <li><a href="${base_path}all-posts.html">Todos os Artigos</a></li>
+              <li><a href="${base_path}index.html#events">Próximos Eventos</a></li>
+              <li><a href="${base_path}index.html#resources">Recursos</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; ${current_year} Kambas do Java - Todos os direitos reservados</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="${base_path}assets/js/main.js"></script>
+  </body>
+</html>

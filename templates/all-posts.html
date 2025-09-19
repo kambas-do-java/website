@@ -1,0 +1,79 @@
+<section class="all-posts-page">
+  <div class="container">
+    <header class="page-header">
+      <h1>Todos os Artigos</h1>
+      <p class="page-description">Explore todos os artigos, tutoriais e conteúdos técnicos da comunidade Kambas do Java</p>
+
+      <div class="filter-controls">
+        <div class="search-box">
+          <input type="text" id="post-search" placeholder="Buscar artigos..." class="search-input">
+          <button type="button" class="search-btn">🔍</button>
+        </div>
+
+        <div class="filter-tags">
+          <button type="button" class="filter-tag active" data-filter="all">Todos</button>
+          <button type="button" class="filter-tag" data-filter="java">Java</button>
+          <button type="button" class="filter-tag" data-filter="spring">Spring Boot</button>
+          <button type="button" class="filter-tag" data-filter="tutorial">Tutoriais</button>
+          <button type="button" class="filter-tag" data-filter="news">Notícias</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="posts-stats">
+      <div class="stat-card">
+        <span class="stat-number">${total_posts}</span>
+        <span class="stat-label">Artigos Publicados</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">${total_years}</span>
+        <span class="stat-label">Anos de Conteúdo</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">${total_categories}</span>
+        <span class="stat-label">Categorias</span>
+      </div>
+    </div>
+
+    <div class="all-posts-content">
+      ${all_posts}
+    </div>
+
+    <div class="categories-guide">
+      <h2>Categorias Populares</h2>
+      <div class="categories-grid">
+        <div class="category-card">
+          <h3>Java Básico</h3>
+          <p>Conceitos fundamentais da linguagem Java</p>
+          <span class="post-count">15 artigos</span>
+        </div>
+        <div class="category-card">
+          <h3>Spring Framework</h3>
+          <p>Desenvolvimento com Spring e Spring Boot</p>
+          <span class="post-count">12 artigos</span>
+        </div>
+        <div class="category-card">
+          <h3>Banco de Dados</h3>
+          <p>Persistência de dados com JPA e Hibernate</p>
+          <span class="post-count">8 artigos</span>
+        </div>
+        <div class="category-card">
+          <h3>DevOps</h3>
+          <p>Deploy, containers e ferramentas DevOps</p>
+          <span class="post-count">6 artigos</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="contribution-cta">
+      <div class="cta-content">
+        <h2>Quer contribuir com a comunidade?</h2>
+        <p>Compartilhe seu conhecimento escrevendo um artigo para os Kambas do Java</p>
+        <div class="cta-buttons">
+          <a href="${base_path}index.html#contact" class="btn btn-primary">Enviar Artigo</a>
+          <a href="https://github.com/kambasdojava" target="_blank" class="btn btn-outline">Ver no GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,75 @@
+<article class="post-article">
+  <header class="article-header">
+    <h1>${post_title}</h1>
+    <div class="article-meta">
+      <span class="publish-date">Publicado em: ${post_date}</span>
+      <div class="social-share">
+        <span>Compartilhar:</span>
+        <a href="https://twitter.com/intent/tweet?text=${post_title}&url=[URL_DO_POST]" target="_blank" class="social-icon twitter">Twitter</a>
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url=[URL_DO_POST]" target="_blank" class="social-icon linkedin">LinkedIn</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=[URL_DO_POST]" target="_blank" class="social-icon facebook">Facebook</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="article-content">
+    ${post_content}
+  </div>
+
+  <footer class="article-footer">
+    <div class="article-tags">
+      <span>Tags:</span>
+      <a href="${base_path}all-posts.html#java">Java</a>
+      <a href="${base_path}all-posts.html#programming">Programação</a>
+      <a href="${base_path}all-posts.html#angola">Angola</a>
+    </div>
+
+    <div class="article-navigation">
+      <a href="${base_path}all-posts.html" class="btn btn-outline">← Voltar para todos os artigos</a>
+    </div>
+
+    <div class="author-bio">
+      <div class="author-avatar">
+        <img src="${base_path}assets/images/authors/default-avatar.png" alt="Autor do artigo">
+      </div>
+      <div class="author-info">
+        <h3>Autor do Artigo</h3>
+        <p>Membro da comunidade Kambas do Java, compartilhando conhecimento e experiências com a plataforma Java.</p>
+        <div class="author-social">
+          <a href="#" class="social-link">Twitter</a>
+          <a href="#" class="social-link">LinkedIn</a>
+          <a href="#" class="social-link">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</article>
+
+<div class="related-posts">
+  <h2>Artigos Relacionados</h2>
+  <div class="related-posts-grid">
+    <div class="related-post">
+      <h3><a href="${base_path}posts/2023/10/java-17-features.html">Novidades do Java 17</a></h3>
+      <p>Explore as principais features introduzidas no Java 17</p>
+    </div>
+    <div class="related-post">
+      <h3><a href="${base_path}posts/2023/09/spring-boot-guide.html">Guia de Spring Boot para Iniciantes</a></h3>
+      <p>Aprenda a criar sua primeira aplicação com Spring Boot</p>
+    </div>
+    <div class="related-post">
+      <h3><a href="${base_path}posts/2023/08/java-community-angola.html">O Ecossistema Java em Angola</a></h3>
+      <p>Conheça as empresas e projetos que usam Java em Angola</p>
+    </div>
+  </div>
+</div>
+
+<section class="newsletter-cta">
+  <div class="container">
+    <h2>Fique por dentro das novidades</h2>
+    <p>Inscreva-se na nossa newsletter para receber artigos, tutoriais e informações sobre eventos</p>
+    <form class="newsletter-form">
+      <input type="email" placeholder="Seu email" required>
+      <button type="submit" class="btn btn-primary">Inscrever</button>
+    </form>
+  </div>
+</section>

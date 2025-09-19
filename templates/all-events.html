@@ -1,0 +1,33 @@
+<section class="all-events-page">
+  <div class="container">
+    <header class="page-header">
+      <h1>Eventos da Comunidade</h1>
+      <p class="page-description">Confira nossa agenda de meetups, workshops e eventos técnicos</p>
+      
+      <div class="events-stats">
+        <div class="stat-card">
+          <span class="stat-number">${total_events}</span>
+          <span class="stat-label">Eventos Realizados</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">${upcoming_count}</span>
+          <span class="stat-label">Próximos Eventos</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">${past_count}</span>
+          <span class="stat-label">Eventos Passados</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="all-events-content">
+      ${all_events}
+    </div>
+
+    <div class="events-cta">
+      <h2>Quer organizar um evento?</h2>
+      <p>Tem uma ideia para um workshop ou meetup? Vamos conversar!</p>
+      <a href="${base_path}index.html#contact" class="btn btn-primary">Propor Evento</a>
+    </div>
+  </div>
+</section>
