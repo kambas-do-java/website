@@ -1,157 +1,53 @@
-# Kambas do Java - Site Estático 🇦🇴☕
+# Kambas do Java - Static Site Generator
 
-Site oficial da comunidade **Kambas do Java (Luanda JUG)** - a primeira comunidade de desenvolvedores Java em Luanda, Angola.
+This is the official website for the Kambas do Java community, a community of Java developers in Luanda, Angola.
 
-## 🚀 Tecnologias
+## Features
 
-- **Java 25** com main instance method
-- **JTE** (Java Template Engine)
-- **Single File** - Tudo em um arquivo Java
-- **GitHub Actions** para CI/CD
-- **GitHub Pages** para hospedagem
-- **Markdown** para posts
-- **CSS moderno** com animações e responsividade
+*   **Static Site Generation:** Generates a static website from Markdown files.
+*   **Content Types:** Supports both blog posts and events.
+*   **Templating:** Uses a simple and lightweight template engine.
+*   **Markdown Support:** Content for posts and events is written in Markdown.
+*   **Responsive Design:** The website is designed to be responsive and work on different devices.
+*   **Zero Dependencies:** The project has no external dependencies and uses only standard Java libraries.
 
-## 📁 Estrutura do Projeto
+## Technologies
 
-```
-kambas-do-java/
-├── StaticSiteGenerator.java    # Gerador principal (arquivo único)
-├── posts/                      # Posts em Markdown
-│   ├── 2024/
-│   │   ├── 12/
-│   │   │   └── bem-vindos-kambas-java.md
-│   │   └── 11/
-│   │       └── java-21-novidades.md
-├── site/                      # Site gerado (criado automaticamente)
-│   ├── index.html
-│   ├── posts/
-│   └── assets/
-├── .github/workflows/
-│   └── deploy.yml             # GitHub Actions
-└── README.md
-```
+*   **Java:** The core logic is written in Java.
+*   **Markdown:** Used for creating content for posts and events.
+*   **HTML/CSS:** The website is built using standard web technologies.
+*   **GitHub Actions:** Used for continuous integration and deployment.
+*   **GitHub Pages:** The website is hosted on GitHub Pages.
 
-## 🎨 Design
+## How to Run Locally
 
-O site utiliza as cores da bandeira de Angola:
-- **Vermelho**: `#CE1126`
-- **Preto**: `#000000`
-- **Amarelo**: `#FFCD00`
-- **Azul**: `#0F47AF`
-- **Fundo**: Branco predominante
+To run the website locally, you need to have Java installed.
 
-### Características do Design:
-- ✅ Totalmente responsivo
-- ✅ Animações suaves e modernas
-- ✅ SEO otimizado
-- ✅ Estrutura semântica HTML5
-- ✅ Schema.org para melhor indexação
-- ✅ Open Graph para redes sociais
-- ✅ Performance otimizada
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/kambas-do-java/website.git
+    cd website
+    ```
 
-## 📝 Como Adicionar Posts
+2.  **Run the generator:**
+    ```bash
+    java --enable-preview --source 24 main.java
+    ```
+    This will generate the website in the `site` directory.
 
-1. Crie um arquivo `.md` na pasta `posts/YYYY/MM/`
-2. Use o formato frontmatter:
+3.  **View the website:**
+    Open the `site/index.html` file in your browser to view the website.
 
-```markdown
----
-title: Título do Post
-date: 2024-12-01
-excerpt: Breve descrição do post
----
+## How to Add Content
 
-# Conteúdo do Post
+### Posts
 
-Seu conteúdo em Markdown aqui...
-```
+To add a new post, create a new Markdown file in the `posts/YYYY/MM` directory, where `YYYY` is the year and `MM` is the month.
 
-### Markdown Suportado:
-- Headers (`#`, `##`, `###`)
-- **Negrito** e *Itálico*
-- `Código inline`
-- ```Blocos de código```
-- Listas com `-`
-- Parágrafos automáticos
+### Events
 
-## 🔧 Como Executar Localmente
+To add a new event, create a new Markdown file in the `events/YYYY/MM` directory, where `YYYY` is the year and `MM` is the month.
 
-```bash
-# Compilar
-javac StaticSiteGenerator.java
+## License
 
-# Executar
-java StaticSiteGenerator
-
-# O site será gerado na pasta 'site/'
-# Abra site/index.html no navegador
-```
-
-## 🚀 Deploy Automático
-
-O site é automaticamente deployado no GitHub Pages quando você:
-
-1. Faz push para a branch `main`
-2. O GitHub Actions executa:
-   - Compila o `StaticSiteGenerator.java`
-   - Executa e gera o site estático
-   - Faz deploy para GitHub Pages
-
-### Configurar GitHub Pages:
-1. Vá em **Settings > Pages**
-2. Source: **GitHub Actions**
-3. O site ficará disponível em: `https://[username].github.io/[repository]/`
-
-## 🏗️ Arquitetura
-
-### StaticSiteGenerator.java
-- **Single File**: Todo o código em um arquivo Java
-- **Zero Dependencies**: Usa apenas Java padrão
-- **Markdown Parser**: Parser simples integrado
-- **Template Engine**: JTE-like templates em strings
-- **CSS Generator**: CSS moderno gerado programaticamente
-
-### Funcionalidades:
-- ✅ Parse de Markdown para HTML
-- ✅ Frontmatter metadata
-- ✅ Agrupamento por ano/mês
-- ✅ Geração de páginas individuais
-- ✅ SEO completo
-- ✅ Sitemap automático
-- ✅ CSS responsivo e animado
-
-## 📊 SEO Features
-
-- Meta tags completas
-- Open Graph para redes sociais
-- Schema.org structured data
-- URLs amigáveis
-- Títulos e descrições otimizados
-- Performance otimizada
-
-## 🤝 Como Contribuir
-
-1. Fork o repositório
-2. Crie uma branch: `git checkout -b minha-feature`
-3. Adicione seus posts ou melhorias
-4. Commit: `git commit -m 'Adicionar nova feature'`
-5. Push: `git push origin minha-feature`
-6. Abra um Pull Request
-
-## 📧 Contato
-
-- **Email**: contato@kambasdojava.ao
-- **WhatsApp**: +244 900 000 000
-- **GitHub**: [github.com/kambas-do-java](https://github.com/kambas-do-java)
-- **LinkedIn**: Kambas do Java Luanda
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para detalhes.
-
----
-
-**Feito com ❤️ e ☕ em Angola** 🇦🇴
-
-*Kambas do Java - Construindo o futuro da programação em Luanda*
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
