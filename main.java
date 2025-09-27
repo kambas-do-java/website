@@ -1,3 +1,21 @@
+import static java.io.IO.println;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+
 void main() throws Exception {
   Path postsDir = Paths.get("posts");
   Path eventsDir = Paths.get("events");
@@ -243,8 +261,7 @@ class MarkdownProcessor {
     }
 
     String location = metadata.getOrDefault("location", "Online");
-    String description = metadata.getOrDefault("description",
-        extractDescription(md));
+    String description = metadata.getOrDefault("description",  extractDescription(md));
     String eventType = metadata.getOrDefault("type", "meetup");
 
     boolean isUpcoming = date.isAfter(LocalDate.now().minusDays(1));

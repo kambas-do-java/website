@@ -124,6 +124,14 @@
     </form>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll('a').forEach(link => {
+    if (link.href.includes('[URL_DO_POST]')) {
+     link.href = link.href.replace('[URL_DO_POST]', window.location.href);
+    }
+  });
+</script>
     </main>
 
     <footer>
