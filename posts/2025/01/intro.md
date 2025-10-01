@@ -1,3 +1,8 @@
+@author Jonas Savimbi
+@tags Java, Kotlin, Spring Boot
+@title Introdução ao Java 17
+@description Esta é a descrição do post
+
 Introdução ao Java 17
 
 Este é o primeiro post da comunidade Kambas do Java! Vamos explorar as novidades do Java 17.
@@ -19,3 +24,4 @@ public final class Circle extends Shape {
     private double radius;
     // ...
 }
+

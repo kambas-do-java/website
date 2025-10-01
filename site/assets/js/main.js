@@ -91,3 +91,49 @@ document.addEventListener('DOMContentLoaded', function() {
         return emptyState;
     }
 });
+
+// Funcionalidades para a página All Members
+document.addEventListener('DOMContentLoaded', function() {
+    // Busca de membros
+    const memberSearchInput = document.getElementById('member-search');
+
+    if (memberSearchInput) {
+        memberSearchInput.addEventListener('input', performMemberSearch);
+    }
+
+    function performMemberSearch() {
+        const searchTerm = memberSearchInput.value.toLowerCase().trim();
+        filterMembers(searchTerm);
+    }
+
+    function filterMembers(term = '') {
+        const memberCards = document.querySelectorAll('.member-card');
+
+        memberCards.forEach(card => {
+            const memberName = card.querySelector('h3').textContent.toLowerCase();
+            const showItem = memberName.includes(term);
+            card.style.display = showItem ? 'block' : 'none';
+        });
+
+        // Mostra mensagem se não houver resultados
+        const visibleMembers = document.querySelectorAll('.member-card[style*="display: block"]');
+        const emptyState = document.querySelector('.empty-state-members') || createEmptyStateMembers();
+
+        if (visibleMembers.length === 0) {
+            emptyState.style.display = 'block';
+        } else {
+            emptyState.style.display = 'none';
+        }
+    }
+
+    function createEmptyStateMembers() {
+        const emptyState = document.createElement('div');
+        emptyState.className = 'empty-state-members';
+        emptyState.innerHTML = `
+            <h3>Nenhum membro encontrado</h3>
+            <p>Tente ajustar sua busca para encontrar o que procura.</p>
+        `;
+        document.querySelector('.members-grid').appendChild(emptyState);
+        return emptyState;
+    }
+});
