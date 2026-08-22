@@ -35,61 +35,107 @@ class DataSet {
 
 class Utils {
   static class MarkdownProcessor {
+
+    private enum ListType { NONE, UNORDERED, ORDERED }
+
     public static String markdownToHtml(String md) {
       String[] lines = md.split("\r?\n");
       StringBuilder sb = new StringBuilder();
-      boolean inList = false;
+      ListType listType = ListType.NONE;
+      boolean inCodeBlock = false;
+      String codeLang = "";
+      StringBuilder codeBuffer = new StringBuilder();
+
       for (String line : lines) {
         if (line.startsWith("@")) {
           // ignora metadados
           continue;
         }
-        
+
+        if (line.startsWith("```")) {
+          if (!inCodeBlock) {
+            inCodeBlock = true;
+            codeLang = line.substring(3).trim();
+            codeBuffer.setLength(0);
+          } else {
+            inCodeBlock = false;
+            String langClass = codeLang.isBlank() ? "" : " class=\"language-" + escapeHtml(codeLang) + "\"";
+            sb.append("<pre><code").append(langClass).append(">")
+              .append(escapeHtml(codeBuffer.toString().stripTrailing()))
+              .append("</code></pre>\n");
+          }
+          continue;
+        }
+        if (inCodeBlock) {
+          codeBuffer.append(line).append("\n");
+          continue;
+        }
+
+        Matcher orderedMatcher = ORDERED_ITEM.matcher(line);
+
         if (line.startsWith("### ")) {
-          if (inList) {
-            sb.append("</ul>\n");
-            inList = false;
-          }
-          sb.append("<h3>").append(escapeHtml(line.substring(4))).append("</h3>\n");
+          listType = closeList(sb, listType);
+          sb.append("<h3>").append(inlineToHtml(line.substring(4))).append("</h3>\n");
         } else if (line.startsWith("## ")) {
-          if (inList) {
-            sb.append("</ul>\n");
-            inList = false;
-          }
-          sb.append("<h2>").append(escapeHtml(line.substring(3))).append("</h2>\n");
+          listType = closeList(sb, listType);
+          sb.append("<h2>").append(inlineToHtml(line.substring(3))).append("</h2>\n");
         } else if (line.startsWith("# ")) {
-          if (inList) {
-            sb.append("</ul>\n");
-            inList = false;
-          }
-          sb.append("<h1>").append(escapeHtml(line.substring(2))).append("</h1>\n");
-        } else if (line.startsWith("- ")) {
-          if (!inList) {
+          listType = closeList(sb, listType);
+          sb.append("<h1>").append(inlineToHtml(line.substring(2))).append("</h1>\n");
+        } else if (line.startsWith("- ") || line.startsWith("* ")) {
+          if (listType != ListType.UNORDERED) {
+            listType = closeList(sb, listType);
             sb.append("<ul>\n");
-            inList = true;
+            listType = ListType.UNORDERED;
           }
-          sb.append("<li>").append(escapeHtml(line.substring(2))).append("</li>\n");
+          sb.append("<li>").append(inlineToHtml(line.substring(2))).append("</li>\n");
+        } else if (orderedMatcher.matches()) {
+          if (listType != ListType.ORDERED) {
+            listType = closeList(sb, listType);
+            sb.append("<ol>\n");
+            listType = ListType.ORDERED;
+          }
+          sb.append("<li>").append(inlineToHtml(orderedMatcher.group(1))).append("</li>\n");
         } else if (line.startsWith("> ")) {
-          if (inList) {
-            sb.append("</ul>\n");
-            inList = false;
-          }
-          sb.append("<blockquote>").append(escapeHtml(line.substring(2))).append("</blockquote>\n");
+          listType = closeList(sb, listType);
+          sb.append("<blockquote>").append(inlineToHtml(line.substring(2))).append("</blockquote>\n");
         } else {
-          if (inList) {
-            sb.append("</ul>\n");
-            inList = false;
-          }
+          listType = closeList(sb, listType);
           if (line.isBlank()) {
             // ignora
           } else {
-            sb.append("<p>").append(escapeHtml(line)).append("</p>\n");
+            sb.append("<p>").append(inlineToHtml(line)).append("</p>\n");
           }
         }
       }
-      if (inList)
-        sb.append("</ul>\n");
+      closeList(sb, listType);
       return sb.toString();
+    }
+
+    private static ListType closeList(StringBuilder sb, ListType listType) {
+      if (listType == ListType.UNORDERED) {
+        sb.append("</ul>\n");
+      } else if (listType == ListType.ORDERED) {
+        sb.append("</ol>\n");
+      }
+      return ListType.NONE;
+    }
+
+    private static final Pattern ORDERED_ITEM = Pattern.compile("^\\d+\\.\\s+(.*)$");
+    private static final Pattern INLINE_CODE = Pattern.compile("`([^`]+)`");
+    private static final Pattern BOLD = Pattern.compile("\\*\\*([^*]+)\\*\\*");
+    private static final Pattern ITALIC = Pattern.compile("\\*([^*]+)\\*");
+    private static final Pattern LINK = Pattern.compile("\\[([^\\]]+)\\]\\(([^)]+)\\)");
+
+    /** Escapes HTML first, then re-applies Markdown inline spans on the escaped text. */
+    private static String inlineToHtml(String line) {
+      String escaped = escapeHtml(line);
+      escaped = LINK.matcher(escaped).replaceAll(m ->
+          "<a href=\"" + m.group(2) + "\">" + m.group(1) + "</a>");
+      escaped = BOLD.matcher(escaped).replaceAll("<strong>$1</strong>");
+      escaped = ITALIC.matcher(escaped).replaceAll("<em>$1</em>");
+      escaped = INLINE_CODE.matcher(escaped).replaceAll("<code>$1</code>");
+      return escaped;
     }
 
     public static String extractDescription(String md) {
@@ -225,6 +271,12 @@ class Utils {
           .collect(Collectors.toList());
 
       StringBuilder eventsHtml = new StringBuilder();
+      if (upcomingEvents.isEmpty()) {
+        eventsHtml.append("<div class='empty-state'>")
+            .append("<h3>Sem eventos agendados</h3>")
+            .append("<p>Ainda não há próximos eventos marcados. Fica atento aos nossos canais.</p>")
+            .append("</div>");
+      }
       for (var event : upcomingEvents) {
         eventsHtml.append("<div class='event'>")
             .append("<div class='event-date'>")
@@ -310,7 +362,7 @@ class Utils {
               .append("<div class='posts-list'>");
 
           for (DataSet.Post post : postsByMonth.get(month)) {
-            postsHtml.append("<div class='post-item' data-categories='java tutorial'>")
+            postsHtml.append("<div class='post-item'>")
                 .append("<div class='post-date'>")
                 .append("<span class='post-day'>").append(String.format("%02d", post.month())).append("</span>")
                 .append("<span class='post-month'>").append(getMonthAbbr(month)).append("</span>")
@@ -320,11 +372,6 @@ class Utils {
                 .append(String.format("%02d", month)).append("/")
                 .append(post.slug()).append(".html'>").append(post.title()).append("</a></h4>")
                 .append("<p class='post-excerpt'>").append(post.description()).append("</p>")
-                .append("<div class='post-meta'>")
-                .append("<span class='post-category'>Java</span>")
-                .append("<span>").append(post.description().length() > 100 ? "5 min read" : "2 min read")
-                .append("</span>")
-                .append("</div>")
                 .append("</div>")
                 .append("</div>");
           }
@@ -336,11 +383,9 @@ class Utils {
       }
 
       // Substitui placeholders
-      // Substitui placeholders
       content = content.replace("${all_posts}", postsHtml.toString())
           .replace("${total_posts}", String.valueOf(posts.size()))
-          .replace("${total_years}", String.valueOf(postsByYearMonth.keySet().size()))
-          .replace("${total_categories}", "8");
+          .replace("${total_years}", String.valueOf(postsByYearMonth.keySet().size()));
 
       // Aplica o template base
       return applyBaseTemplate(template, content, "Todos os Posts - Kambas do Java",
@@ -440,7 +485,7 @@ class Utils {
       for (Map.Entry<String, String> entry : member.socialLinks().entrySet()) {
         socialLinksHtml.append("<a href='" + entry.getValue() + "' target='_blank'>" + entry.getKey() + "</a>");
       }
-      content = content.replace("", socialLinksHtml.toString());
+      content = content.replace("${member_social_links}", socialLinksHtml.toString());
 
       String basePath = "../";
       return applyBaseTemplate(template, content, member.name() + " - Kambas do Java",

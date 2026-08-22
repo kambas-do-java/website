@@ -7,8 +7,11 @@
     <meta name="keywords" content="java, luanda, angola, desenvolvedores, programação, jug, kambas">
     <meta name="author" content="Kambas do Java">
     <title>${page_title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Archivo+Black&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${base_path}assets/css/style.css">
-    <link rel="icon" href="${base_path}assets/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="${base_path}assets/images/logo.png" type="image/png">
   </head>
   <body>
     <header>
@@ -19,11 +22,14 @@
             <span>Kambas do Java</span>
           </a>
         </div>
+        <button type="button" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
         <nav>
           <ul>
             <li><a href="${base_path}index.html">Início</a></li>
             <li><a href="${base_path}all-posts.html">Artigos</a></li>
-            <li><a href="${base_path}index.html#events">Eventos</a></li>
+            <li><a href="${base_path}all-events.html">Eventos</a></li>
             <li><a href="${base_path}all-members.html">Membros</a></li>
             <li><a href="${base_path}index.html#contact">Contato</a></li>
           </ul>

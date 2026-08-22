@@ -209,9 +209,9 @@ document.addEventListener('DOMContentLoaded', function() {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight - windowHeight;
       const scrollTop = window.pageYOffset;
-      const scrollPercent = (scrollTop / documentHeight) * 100;
-      
-      progressBar.style.width = scrollPercent + '%';
+      const scrollPercent = scrollTop / documentHeight;
+
+      progressBar.style.transform = `scaleX(${scrollPercent})`;
     });
   }
   
