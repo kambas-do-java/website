@@ -438,56 +438,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   // ===================================
-  // FORM VALIDATION
-  // ===================================
-  
-  const contactForm = document.querySelector('.contact-form form');
-  
-  if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const formData = new FormData(this);
-      const data = Object.fromEntries(formData);
-      
-      // Validação básica
-      let isValid = true;
-      
-      if (!data.email || !data.email.includes('@')) {
-        alert('Por favor, insira um email válido.');
-        isValid = false;
-      }
-      
-      if (isValid) {
-        // Aqui você pode adicionar a lógica de envio
-        alert('Mensagem enviada com sucesso! (Demo)');
-        this.reset();
-      }
-    });
-  }
-  
-  // ===================================
-  // NEWSLETTER FORM
-  // ===================================
-  
-  const newsletterForm = document.querySelector('.newsletter-form');
-  
-  if (newsletterForm) {
-    newsletterForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const email = this.querySelector('input[type="email"]').value;
-      
-      if (email && email.includes('@')) {
-        alert('Obrigado por se inscrever! (Demo)');
-        this.reset();
-      } else {
-        alert('Por favor, insira um email válido.');
-      }
-    });
-  }
-  
-  // ===================================
   // STICKY HEADER
   // ===================================
   

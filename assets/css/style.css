@@ -1667,6 +1667,24 @@ section h2::before {
   margin-top: var(--spacing-xl);
 }
 
+.contact-content--single {
+  grid-template-columns: 1fr;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.contact-content--single .social-links {
+  align-items: center;
+}
+
+.contact-content--single .social-link {
+  width: 100%;
+  max-width: 320px;
+  justify-content: center;
+}
+
 .contact-info h3 {
   font-size: 1.6rem;
   color: var(--ink);
@@ -1703,53 +1721,6 @@ section h2::before {
   color: var(--accent-contrast);
   border-color: var(--accent);
   transform: translateX(6px);
-}
-
-.contact-form {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  padding: var(--spacing-xl);
-  border-radius: var(--radius-lg);
-}
-
-.contact-form h3 {
-  font-size: 1.6rem;
-  color: var(--ink);
-  margin-bottom: var(--spacing-lg);
-}
-
-.contact-form input,
-.contact-form textarea {
-  width: 100%;
-  padding: 14px 18px;
-  margin-bottom: var(--spacing-md);
-  border: 2px solid var(--line);
-  border-radius: var(--radius-md);
-  font-size: 1rem;
-  font-family: inherit;
-  transition: border-color var(--transition-base);
-  background: var(--bg-elevated);
-  color: var(--ink);
-}
-
-.contact-form input::placeholder,
-.contact-form textarea::placeholder {
-  color: var(--ink-faint);
-}
-
-.contact-form input:focus,
-.contact-form textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-}
-
-.contact-form textarea {
-  resize: vertical;
-  min-height: 150px;
-}
-
-.contact-form button {
-  width: 100%;
 }
 
 @media (max-width: 968px) {
@@ -1944,6 +1915,47 @@ footer {
   margin-top: var(--spacing-xl);
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* "Ver Todos" links are secondary wayfinding, not competing CTAs —
+   demoted to text weight so the hero's primary action stays the one ask. */
+.view-all .btn {
+  display: inline-flex;
+  padding: 4px 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.view-all .btn::after {
+  content: '\2192';
+  margin-left: 6px;
+  transition: transform var(--transition-base);
+}
+
+.view-all .btn:hover {
+  background: none;
+  color: var(--ink);
+  transform: none;
+  box-shadow: none;
+}
+
+.view-all .btn:hover::after {
+  transform: translateX(4px);
+}
+
 .empty-state {
   text-align: center;
   padding: var(--spacing-3xl) var(--spacing-md);
@@ -2129,7 +2141,6 @@ footer {
   .hero-buttons,
   .btn,
   .social-links,
-  .contact-form,
   .newsletter-cta,
   .filter-controls,
   .menu-toggle,
