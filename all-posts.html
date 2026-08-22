@@ -7,8 +7,11 @@
     <meta name="keywords" content="java, luanda, angola, desenvolvedores, programação, jug, kambas">
     <meta name="author" content="Kambas do Java">
     <title>Todos os Posts - Kambas do Java</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Archivo+Black&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/images/logo.png" type="image/png">
   </head>
   <body>
     <header>
@@ -19,11 +22,14 @@
             <span>Kambas do Java</span>
           </a>
         </div>
+        <button type="button" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
         <nav>
           <ul>
             <li><a href="index.html">Início</a></li>
             <li><a href="all-posts.html">Artigos</a></li>
-            <li><a href="index.html#events">Eventos</a></li>
+            <li><a href="all-events.html">Eventos</a></li>
             <li><a href="all-members.html">Membros</a></li>
             <li><a href="index.html#contact">Contato</a></li>
           </ul>
@@ -43,14 +49,6 @@
           <input type="text" id="post-search" placeholder="Buscar artigos..." class="search-input">
           <button type="button" class="search-btn">🔍</button>
         </div>
-
-        <div class="filter-tags">
-          <button type="button" class="filter-tag active" data-filter="all">Todos</button>
-          <button type="button" class="filter-tag" data-filter="java">Java</button>
-          <button type="button" class="filter-tag" data-filter="spring">Spring Boot</button>
-          <button type="button" class="filter-tag" data-filter="tutorial">Tutoriais</button>
-          <button type="button" class="filter-tag" data-filter="news">Notícias</button>
-        </div>
       </div>
     </header>
 
@@ -63,40 +61,10 @@
         <span class="stat-number">1</span>
         <span class="stat-label">Anos de Conteúdo</span>
       </div>
-      <div class="stat-card">
-        <span class="stat-number">8</span>
-        <span class="stat-label">Categorias</span>
-      </div>
     </div>
 
     <div class="all-posts-content">
-      <div class='year-section'><h2>2025</h2><div class='month-section'><h3>Janeiro</h3><div class='posts-list'><div class='post-item' data-categories='java tutorial'><div class='post-date'><span class='post-day'>01</span><span class='post-month'>JAN</span></div><div class='post-content'><h4><a href='posts/2025/01/intro.html'>Introdução ao Java 17</a></h4><p class='post-excerpt'>Esta é a descrição do post</p><div class='post-meta'><span class='post-category'>Java</span><span>2 min read</span></div></div></div></div></div></div>
-    </div>
-
-    <div class="categories-guide">
-      <h2>Categorias Populares</h2>
-      <div class="categories-grid">
-        <div class="category-card">
-          <h3>Java Básico</h3>
-          <p>Conceitos fundamentais da linguagem Java</p>
-          <span class="post-count">15 artigos</span>
-        </div>
-        <div class="category-card">
-          <h3>Spring Framework</h3>
-          <p>Desenvolvimento com Spring e Spring Boot</p>
-          <span class="post-count">12 artigos</span>
-        </div>
-        <div class="category-card">
-          <h3>Banco de Dados</h3>
-          <p>Persistência de dados com JPA e Hibernate</p>
-          <span class="post-count">8 artigos</span>
-        </div>
-        <div class="category-card">
-          <h3>DevOps</h3>
-          <p>Deploy, containers e ferramentas DevOps</p>
-          <span class="post-count">6 artigos</span>
-        </div>
-      </div>
+      <div class='year-section'><h2>2025</h2><div class='month-section'><h3>Janeiro</h3><div class='posts-list'><div class='post-item'><div class='post-date'><span class='post-day'>01</span><span class='post-month'>JAN</span></div><div class='post-content'><h4><a href='posts/2025/01/intro.html'>Introdução ao Java 17</a></h4><p class='post-excerpt'>Esta é a descrição do post</p></div></div></div></div></div>
     </div>
 
     <div class="contribution-cta">
@@ -138,7 +106,7 @@
           </div>
         </div>
         <div class="footer-bottom">
-          <p>&copy; 2025 Kambas do Java - Todos os direitos reservados</p>
+          <p>&copy; 2026 Kambas do Java - Todos os direitos reservados</p>
         </div>
       </div>
     </footer>

@@ -7,8 +7,11 @@
     <meta name="keywords" content="java, luanda, angola, desenvolvedores, programação, jug, kambas">
     <meta name="author" content="Kambas do Java">
     <title>Kambas do Java - Comunidade Java de Luanda</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Archivo+Black&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/images/logo.png" type="image/png">
   </head>
   <body>
     <header>
@@ -19,11 +22,14 @@
             <span>Kambas do Java</span>
           </a>
         </div>
+        <button type="button" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
         <nav>
           <ul>
             <li><a href="index.html">Início</a></li>
             <li><a href="all-posts.html">Artigos</a></li>
-            <li><a href="index.html#events">Eventos</a></li>
+            <li><a href="all-events.html">Eventos</a></li>
             <li><a href="all-members.html">Membros</a></li>
             <li><a href="index.html#contact">Contato</a></li>
           </ul>
@@ -42,8 +48,19 @@
         <a href="all-posts.html" class="btn btn-secondary">Ver Artigos</a>
       </div>
     </div>
-    <div class="hero-image">
-      <img src="assets/images/java-community.png" alt="Comunidade Java">
+    <div class="hero-image" aria-hidden="true">
+      <svg class="kamba-motif" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="320" height="320" rx="24" class="kamba-motif-bg"/>
+        <g class="kamba-motif-lines">
+          <path d="M20 260 L100 60 L180 260 Z"/>
+          <path d="M120 260 L200 60 L280 260 Z"/>
+          <circle cx="100" cy="60" r="10"/>
+          <circle cx="200" cy="60" r="10"/>
+          <path d="M20 260 H280"/>
+          <path d="M60 200 H240"/>
+          <path d="M75 150 H225"/>
+        </g>
+      </svg>
     </div>
   </div>
 </section>
@@ -113,28 +130,10 @@
   <div class="container">
     <h2>Próximos Eventos</h2>
     <div class="events-list">
-      <div class="event">
-        <div class="event-date">
-          <span class="event-day">25</span>
-          <span class="event-month">Out</span>
-        </div>
-        <div class="event-details">
-          <h3>Workshop: Spring Boot para Iniciantes</h3>
-          <p>Aprenda a criar sua primeira aplicação com Spring Boot</p>
-          <a href="#" class="event-link">Mais informações</a>
-        </div>
-      </div>
-      <div class="event">
-        <div class="event-date">
-          <span class="event-day">12</span>
-          <span class="event-month">Nov</span>
-        </div>
-        <div class="event-details">
-          <h3>Meetup: Java 17 Features</h3>
-          <p>Explorando as novidades do Java 17</p>
-          <a href="#" class="event-link">Mais informações</a>
-        </div>
-      </div>
+      <div class='event'><div class='event-date'><span class='event-day'>22</span><span class='event-month'>agosto</span></div><div class='event-details'><h3><a href='events/evento-de-setembro.html'>evento-de-setembro</a></h3><p class='event-location'>Online</p><p>Venha para o nosso evento de Setembro!</p><a href='events/evento-de-setembro.html' class='event-link'>Mais informações</a></div></div>
+    </div>
+    <div class="view-all">
+      <a href="all-events.html" class="btn">Ver Todos os Eventos</a>
     </div>
   </div>
 </section>
@@ -204,7 +203,7 @@
           </div>
         </div>
         <div class="footer-bottom">
-          <p>&copy; 2025 Kambas do Java - Todos os direitos reservados</p>
+          <p>&copy; 2026 Kambas do Java - Todos os direitos reservados</p>
         </div>
       </div>
     </footer>

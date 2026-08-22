@@ -7,8 +7,11 @@
     <meta name="keywords" content="java, luanda, angola, desenvolvedores, programação, jug, kambas">
     <meta name="author" content="Kambas do Java">
     <title>Introdução ao Java 17 - Kambas do Java</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Archivo+Black&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../../assets/css/style.css">
-    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../../../assets/images/logo.png" type="image/png">
   </head>
   <body>
     <header>
@@ -19,11 +22,14 @@
             <span>Kambas do Java</span>
           </a>
         </div>
+        <button type="button" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
         <nav>
           <ul>
             <li><a href="../../../index.html">Início</a></li>
             <li><a href="../../../all-posts.html">Artigos</a></li>
-            <li><a href="../../../index.html#events">Eventos</a></li>
+            <li><a href="../../../all-events.html">Eventos</a></li>
             <li><a href="../../../all-members.html">Membros</a></li>
             <li><a href="../../../index.html#contact">Contato</a></li>
           </ul>
@@ -56,79 +62,30 @@
 <li>Novos métodos em classes utilitárias</li>
 </ul>
 <h2>Como usar</h2>
-<p>```java</p>
-<p>public sealed class Shape permits Circle, Square {</p>
-<p>    // ...</p>
-<p>}</p>
-<p>public final class Circle extends Shape {</p>
-<p>    private double radius;</p>
-<p>    // ...</p>
-<p>}</p>
 
   </div>
 
   <footer class="article-footer">
-    <div class="article-tags">
-      <span>Tags:</span>
-      <a href="../../../all-posts.html#java">Java</a>
-      <a href="../../../all-posts.html#programming">Programação</a>
-      <a href="../../../all-posts.html#angola">Angola</a>
-    </div>
-
     <div class="article-navigation">
       <a href="../../../all-posts.html" class="btn btn-outline">← Voltar para todos os artigos</a>
-    </div>
-
-    <div class="author-bio">
-      <div class="author-avatar">
-        <img src="../../../assets/images/authors/default-avatar.png" alt="Autor do artigo">
-      </div>
-      <div class="author-info">
-        <h3>Autor do Artigo</h3>
-        <p>Membro da comunidade Kambas do Java, compartilhando conhecimento e experiências com a plataforma Java.</p>
-        <div class="author-social">
-          <a href="#" class="social-link">Twitter</a>
-          <a href="#" class="social-link">LinkedIn</a>
-          <a href="#" class="social-link">GitHub</a>
-        </div>
-      </div>
     </div>
   </footer>
 </article>
 
-<div class="related-posts">
-  <h2>Artigos Relacionados</h2>
-  <div class="related-posts-grid">
-    <div class="related-post">
-      <h3><a href="../../../posts/2023/10/java-17-features.html">Novidades do Java 17</a></h3>
-      <p>Explore as principais features introduzidas no Java 17</p>
-    </div>
-    <div class="related-post">
-      <h3><a href="../../../posts/2023/09/spring-boot-guide.html">Guia de Spring Boot para Iniciantes</a></h3>
-      <p>Aprenda a criar sua primeira aplicação com Spring Boot</p>
-    </div>
-    <div class="related-post">
-      <h3><a href="../../../posts/2023/08/java-community-angola.html">O Ecossistema Java em Angola</a></h3>
-      <p>Conheça as empresas e projetos que usam Java em Angola</p>
-    </div>
-  </div>
-</div>
-
 <section class="newsletter-cta">
   <div class="container">
-    <h2>Fique por dentro das novidades</h2>
-    <p>Inscreva-se na nossa newsletter para receber artigos, tutoriais e informações sobre eventos</p>
-    <form class="newsletter-form">
-      <input type="email" placeholder="Seu email" required>
-      <button type="submit" class="btn btn-primary">Inscrever</button>
-    </form>
+    <h2>Junte-se à comunidade</h2>
+    <p>Acompanhe os próximos artigos e eventos nos nossos canais</p>
+    <div class="cta-buttons">
+      <a href="../../../index.html#contact" class="btn btn-primary">Entrar em Contato</a>
+    </div>
   </div>
 </section>
 
 <script>
-  document.querySelectorAll('a').forEach(link => {
+  document.querySelectorAll('.social-icon').forEach(link => {
     if (link.href.includes('[URL_DO_POST]')) {
-     link.href = link.href.replace('[URL_DO_POST]', window.location.href);
+     link.href = link.href.replace('[URL_DO_POST]', encodeURIComponent(window.location.href));
     }
   });
 </script>
@@ -159,7 +116,7 @@
           </div>
         </div>
         <div class="footer-bottom">
-          <p>&copy; 2025 Kambas do Java - Todos os direitos reservados</p>
+          <p>&copy; 2026 Kambas do Java - Todos os direitos reservados</p>
         </div>
       </div>
     </footer>
