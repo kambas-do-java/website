@@ -264,7 +264,7 @@ class Utils {
             .append("</div>");
       }
 
-      // Prepara Dataset.Eventos próximos
+      // Prepara Eventos próximos
       List<DataSet.Event> upcomingEvents = events.stream()
           .filter(e -> e.isUpcoming())
           .limit(2)
@@ -313,7 +313,7 @@ class Utils {
           .replace("${member_totals}", members.size() + "");
 
       return applyBaseTemplate(template, content, "Kambas do Java - Comunidade Java de Luanda",
-          "Comunidade de desenvolvedores Java de Luanda, Angola. Dataset.Eventos, tutoriais e notícias sobre Java e tecnologia.",
+          "Comunidade de desenvolvedores Java de Luanda, Angola. Eventos, tutoriais e notícias sobre Java e tecnologia.",
           true);
     }
 
@@ -427,7 +427,7 @@ class Utils {
       String template = Files.readString(Paths.get("templates/base.html"));
       String content = Files.readString(Paths.get("templates/all-events.html"));
 
-      // Separa Dataset.Eventos por status
+      // Separa Eventos por status
       List<DataSet.Event> upcomingEvents = events.stream()
           .filter(e -> e.isUpcoming())
           .collect(Collectors.toList());
@@ -438,10 +438,10 @@ class Utils {
 
       StringBuilder eventsHtml = new StringBuilder();
 
-      // Dataset.Eventos próximos
+      // Eventos próximos
       if (!upcomingEvents.isEmpty()) {
         eventsHtml.append("<div class='events-section'>")
-            .append("<h2>Próximos Dataset.Eventos</h2>")
+            .append("<h2>Próximos Eventos</h2>")
             .append("<div class='events-list'>");
 
         for (DataSet.Event event : upcomingEvents) {
@@ -451,7 +451,7 @@ class Utils {
         eventsHtml.append("</div></div>");
       }
 
-      // Dataset.Eventos passados
+      // Eventos passados
       if (!pastEvents.isEmpty()) {
         eventsHtml.append("<div class='events-section'>")
             .append("<h2>Eventos Passados</h2>")
@@ -469,8 +469,8 @@ class Utils {
           .replace("${upcoming_count}", String.valueOf(upcomingEvents.size()))
           .replace("${past_count}", String.valueOf(pastEvents.size()));
 
-      return applyBaseTemplate(template, content, "Todos os Dataset.Eventos - Kambas do Java",
-          "Calendário completo de Dataset.Eventos, meetups e workshops da comunidade Kambas do Java", true);
+      return applyBaseTemplate(template, content, "Todos os Eventos - Kambas do Java",
+          "Calendário completo de eventos, meetups e workshops da comunidade Kambas do Java", true);
     }
 
     static String renderMember(DataSet.Member member) throws Exception {
@@ -482,8 +482,12 @@ class Utils {
           .replace("${member_content}", member.content());
 
       StringBuilder socialLinksHtml = new StringBuilder();
-      for (Map.Entry<String, String> entry : member.socialLinks().entrySet()) {
-        socialLinksHtml.append("<a href='" + entry.getValue() + "' target='_blank'>" + entry.getKey() + "</a>");
+      if (!member.socialLinks().isEmpty()) {
+        socialLinksHtml.append("<div class='member-social-links'>");
+        for (Map.Entry<String, String> entry : member.socialLinks().entrySet()) {
+          socialLinksHtml.append("<a href='" + entry.getValue() + "' target='_blank'>" + entry.getKey() + "</a>");
+        }
+        socialLinksHtml.append("</div>");
       }
       content = content.replace("${member_social_links}", socialLinksHtml.toString());
 
@@ -615,7 +619,7 @@ class Utils {
 
       List<DataSet.Event> events = new ArrayList<>();
 
-      // Processa Dataset.Eventos
+      // Processa Eventos
       if (Files.exists(eventsDir)) {
         Files.walk(eventsDir)
             .filter(p -> p.toString().endsWith(".md")) // Process only .md files
@@ -627,7 +631,7 @@ class Utils {
                 DataSet.Event event = Utils.MarkdownProcessor.parseEventFromMarkdown(md, fileName);
                 events.add(event);
 
-                // Gera HTML do Dataset.Evento
+                // Gera HTML do Evento
                 String eventHtml = Utils.TemplateEngine.renderEvent(event);
                 Path outDir = siteDir.resolve("events");
                 Files.createDirectories(outDir);
@@ -638,7 +642,7 @@ class Utils {
             });
       }
 
-      // Ordena Dataset.Eventos: próximos primeiro, depois passados
+      // Ordena Eventos: próximos primeiro, depois passados
       events.sort((e1, e2) -> {
         if (e1.isUpcoming != e2.isUpcoming) {
           return Boolean.compare(e2.isUpcoming, e1.isUpcoming); // Upcoming first
@@ -726,7 +730,7 @@ class Utils {
       Files.writeString(siteDir.resolve("all-posts.html"), allPostsHtml, StandardCharsets.UTF_8);
       println("Página de todos os posts gerada.");
 
-      // Gera página com todos os Dataset.Eventos
+      // Gera página com todos os Eventos
       String allEventsHtml = Utils.TemplateEngine.renderAllEvents(events);
       Files.writeString(siteDir.resolve("all-events.html"), allEventsHtml, StandardCharsets.UTF_8);
       println("Página de todos os eventos gerada.");
