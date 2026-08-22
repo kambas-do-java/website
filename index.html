@@ -9,7 +9,7 @@
     <title>Kambas do Java - Comunidade Java de Luanda</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Archivo+Black&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="icon" href="assets/images/logo.png" type="image/png">
   </head>
@@ -49,16 +49,18 @@
       </div>
     </div>
     <div class="hero-image" aria-hidden="true">
-      <svg class="kamba-motif" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
-        <rect x="0" y="0" width="320" height="320" rx="24" class="kamba-motif-bg"/>
-        <g class="kamba-motif-lines">
-          <path d="M20 260 L100 60 L180 260 Z"/>
-          <path d="M120 260 L200 60 L280 260 Z"/>
-          <circle cx="100" cy="60" r="10"/>
-          <circle cx="200" cy="60" r="10"/>
-          <path d="M20 260 H280"/>
-          <path d="M60 200 H240"/>
-          <path d="M75 150 H225"/>
+      <svg class="tile-motif" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="4" width="312" height="312" rx="20" class="tile-motif-frame"/>
+        <g class="tile-motif-lines">
+          <path d="M16 112 Q64 80 112 112 T208 112 T304 112"/>
+          <path d="M16 208 Q64 176 112 208 T208 208 T304 208"/>
+          <path d="M112 16 Q80 64 112 112 T112 208 T112 304"/>
+          <path d="M208 16 Q176 64 208 112 T208 208 T208 304"/>
+          <line x1="16" y1="16" x2="304" y2="16"/>
+          <line x1="16" y1="304" x2="304" y2="304"/>
+          <line x1="16" y1="16" x2="16" y2="304"/>
+          <line x1="304" y1="16" x2="304" y2="304"/>
+          <circle cx="160" cy="160" r="9"/>
         </g>
       </svg>
     </div>
@@ -189,7 +191,8 @@
             <h3>Links Úteis</h3>
             <ul>
               <li><a href="all-posts.html">Todos os Artigos</a></li>
-              <li><a href="index.html#events">Próximos Eventos</a></li>
+              <li><a href="all-events.html">Todos os Eventos</a></li>
+              <li><a href="all-members.html">Todos os Membros</a></li>
             </ul>
           </div>
         </div>
