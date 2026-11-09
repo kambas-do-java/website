@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Java 25: o que muda no teu dia a dia · Kambas do Java</title>
+  <meta name="description" content="O Java 25 é a mais recente versão LTS. Estas são as mudanças que sentes logo ao escrever código, sem decorar a lista de JEPs.">
+  <meta name="theme-color" content="#C8102E">
+  <meta property="og:title" content="Java 25: o que muda no teu dia a dia · Kambas do Java">
+  <meta property="og:description" content="O Java 25 é a mais recente versão LTS. Estas são as mudanças que sentes logo ao escrever código, sem decorar a lista de JEPs.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="../../../assets/images/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Figtree:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Saltar para o conteúdo</a>
+  <header class="top">
+    <div class="wrap top-in">
+      <a class="brand" href="../../../index.html">
+        <img src="../../../assets/images/logo.svg" alt="" width="40" height="40">
+        <span>Kambas<br>do Java</span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+      <nav id="nav" aria-label="Principal">
+        <a href="../../../index.html">Início</a>
+        <a href="../../../all-posts.html" aria-current="page">Artigos</a>
+        <a href="../../../all-events.html">Eventos</a>
+        <a href="../../../all-members.html">Membros</a>
+        <a class="join" href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Entrar no Discord</a>
+      </nav>
+    </div>
+    <div class="livery" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+<article>
+  <header class="page-head">
+    <div class="wrap narrow">
+      <p class="back"><a href="../../../all-posts.html">← Artigos</a></p>
+      <h1>Java 25: o que muda no teu dia a dia</h1>
+      <p class="byline">Dumilde Fernando · 9 de novembro de 2026 · 2 min de leitura</p>
+      <ul class="tags"><li>Java 25</li><li>LTS</li><li>Novidades</li></ul>
+    </div>
+  </header>
+  <div class="wrap narrow prose">
+<p>O Java 25 saiu em setembro de 2025 e é uma versão LTS: é a que as empresas vão adotar nos próximos anos. Em vez de listar todas as JEPs, ficam as que mais mexem em quem escreve código.</p>
+<h3>Programas pequenos sem cerimónia</h3>
+<p>Já não precisas de <code>public static void main(String[] args)</code> dentro de uma classe para escrever um programa. Um ficheiro com um método <code>main</code> simples chega:</p>
+<pre><code class="language-java">void main() {
+    IO.println(&quot;Olá, Luanda!&quot;);
+}</code></pre>
+<p>Corre-se com <code>java Ola.java</code>. Para quem está a começar, isto tira meia hora de explicações sobre <code>static</code> e <code>String[]</code> antes do primeiro resultado.</p>
+<h3>Importar um módulo inteiro</h3>
+<p>Em vez de dez linhas de <code>import java.util.*</code>, podes importar tudo o que o módulo <code>java.base</code> exporta:</p>
+<pre><code class="language-java">import module java.base;</code></pre>
+<p>É o que este site usa para se gerar.</p>
+<h3>Construtores mais flexíveis</h3>
+<p>Podes escrever código <strong>antes</strong> de chamar <code>super(...)</code>, desde que não uses <code>this</code>. Serve sobretudo para validar argumentos sem truques estáticos:</p>
+<pre><code class="language-java">class Conta extends Titular {
+    Conta(String nome, double saldo) {
+        if (saldo &lt; 0) throw new IllegalArgumentException(&quot;Saldo negativo&quot;);
+        super(nome);
+    }
+}</code></pre>
+<h3>Menos memória, de graça</h3>
+<p>Os <em>compact object headers</em> encolhem o cabeçalho de cada objeto. Em aplicações com muitos objetos pequenos, usas menos memória e o GC trabalha menos, sem mudar uma linha de código. Em máquinas modestas, isto conta.</p>
+<h3>O que fazer agora</h3>
+<ol><li>Instala o JDK 25 e corre o teu projeto atual.</li><li>Lê os avisos de depreciação que aparecerem.</li><li>Experimenta o <code>main</code> simples num ficheiro de teste.</li></ol>
+<blockquote><p>Se ainda estás no Java 8 ou 11, não saltes tudo de uma vez: passa primeiro para o 17, depois para o 21 e só então para o 25.</p></blockquote>
+
+  </div>
+</article>
+
+  </main>
+
+  <footer class="foot">
+    <div class="livery" aria-hidden="true"></div>
+    <div class="wrap foot-in">
+      <div>
+        <p class="foot-name">Kambas do Java</p>
+        <p>JUG Luanda. Programadores Java de Angola, a aprender em conjunto.</p>
+      </div>
+      <ul class="foot-links">
+        <li><a href="https://www.youtube.com/@KambasdoJava" target="_blank" rel="noopener">YouTube</a></li>
+        <li><a href="https://www.linkedin.com/company/kambas-do-java/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Discord</a></li>
+        <li><a href="https://github.com/kambas-do-java" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p class="foot-small">© 2026 Kambas do Java · Feito em Luanda</p>
+    </div>
+  </footer>
+  <script src="../../../assets/js/main.js" defer></script>
+</body>
+</html>

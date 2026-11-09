@@ -1,206 +1,151 @@
 <!DOCTYPE html>
-<html lang="pt">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Comunidade de desenvolvedores Java de Luanda, Angola. Eventos, tutoriais e notícias sobre Java e tecnologia.">
-    <meta name="keywords" content="java, luanda, angola, desenvolvedores, programação, jug, kambas">
-    <meta name="author" content="Kambas do Java">
-    <title>Kambas do Java - Comunidade Java de Luanda</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" href="assets/images/logo.png" type="image/png">
-  </head>
-  <body>
-    <header>
-      <div class="container">
-        <div class="logo">
-          <a href="index.html">
-            <img src="assets/images/logo.png" alt="Kambas do Java">
-            <span>Kambas do Java</span>
-          </a>
-        </div>
-        <button type="button" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-        <nav>
-          <ul>
-            <li><a href="index.html">Início</a></li>
-            <li><a href="all-posts.html">Artigos</a></li>
-            <li><a href="all-events.html">Eventos</a></li>
-            <li><a href="all-members.html">Membros</a></li>
-            <li><a href="index.html#contact">Contato</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kambas do Java · JUG Luanda</title>
+  <meta name="description" content="Kambas do Java, o JUG Luanda: a comunidade de programadores Java de Angola. Eventos, artigos e gente.">
+  <meta name="theme-color" content="#C8102E">
+  <meta property="og:title" content="Kambas do Java · JUG Luanda">
+  <meta property="og:description" content="Kambas do Java, o JUG Luanda: a comunidade de programadores Java de Angola. Eventos, artigos e gente.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/images/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Figtree:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Saltar para o conteúdo</a>
+  <header class="top">
+    <div class="wrap top-in">
+      <a class="brand" href="index.html">
+        <img src="assets/images/logo.svg" alt="" width="40" height="40">
+        <span>Kambas<br>do Java</span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+      <nav id="nav" aria-label="Principal">
+        <a href="index.html" aria-current="page">Início</a>
+        <a href="all-posts.html">Artigos</a>
+        <a href="all-events.html">Eventos</a>
+        <a href="all-members.html">Membros</a>
+        <a class="join" href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Entrar no Discord</a>
+      </nav>
+    </div>
+    <div class="livery" aria-hidden="true"></div>
+  </header>
 
-    <main>
-      <section class="hero">
-  <div class="container">
-    <div class="hero-content">
-      <h1>Comunidade Java de Luanda</h1>
-      <p>Conectando desenvolvedores, compartilhando conhecimento e impulsionando a inovação em Angola</p>
-      <div class="hero-buttons">
-        <a href="#about" class="btn btn-primary">Saiba Mais</a>
-        <a href="all-posts.html" class="btn btn-secondary">Ver Artigos</a>
+  <main id="main">
+<section class="hero">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 540" class="sona" aria-hidden="true" focusable="false"><path d="M60.0 30A30.0 30.0 0 0 0 30 60.0M90 60.0A30.0 30.0 0 0 0 60.0 90M60.0 90A30.0 30.0 0 0 1 90 120.0M30 120.0A30.0 30.0 0 0 1 60.0 150M60.0 150A30.0 30.0 0 0 0 30 180.0M90 180.0A30.0 30.0 0 0 0 60.0 210M60.0 210A30.0 30.0 0 0 0 30 240.0M90 240.0A30.0 30.0 0 0 0 60.0 270M60.0 270A30.0 30.0 0 0 0 30 300.0M90 300.0A30.0 30.0 0 0 0 60.0 330M60.0 330A30.0 30.0 0 0 0 30 360.0M90 360.0A30.0 30.0 0 0 0 60.0 390M60.0 390A30.0 30.0 0 0 1 90 420.0M30 420.0A30.0 30.0 0 0 1 60.0 450M60.0 450A30.0 30.0 0 0 0 30 480.0M90 480.0A30.0 30.0 0 0 0 60.0 510M120.0 30A30.0 30.0 0 0 1 150 60.0M90 60.0A30.0 30.0 0 0 1 120.0 90M120.0 90A30.0 30.0 0 0 0 90 120.0M150 120.0A30.0 30.0 0 0 0 120.0 150M120.0 150A30.0 30.0 0 0 0 90 180.0M150 180.0A30.0 30.0 0 0 0 120.0 210M120.0 210A30.0 30.0 0 0 1 150 240.0M90 240.0A30.0 30.0 0 0 1 120.0 270M120.0 270A30.0 30.0 0 0 1 150 300.0M90 300.0A30.0 30.0 0 0 1 120.0 330M120.0 330A30.0 30.0 0 0 0 90 360.0M150 360.0A30.0 30.0 0 0 0 120.0 390M120.0 390A30.0 30.0 0 0 0 90 420.0M150 420.0A30.0 30.0 0 0 0 120.0 450M120.0 450A30.0 30.0 0 0 1 150 480.0M90 480.0A30.0 30.0 0 0 1 120.0 510M180.0 30A30.0 30.0 0 0 0 150 60.0M210 60.0A30.0 30.0 0 0 0 180.0 90M180.0 90A30.0 30.0 0 0 0 150 120.0M210 120.0A30.0 30.0 0 0 0 180.0 150M180.0 150A30.0 30.0 0 0 0 150 180.0M210 180.0A30.0 30.0 0 0 0 180.0 210M180.0 210A30.0 30.0 0 0 0 150 240.0M210 240.0A30.0 30.0 0 0 0 180.0 270M180.0 270A30.0 30.0 0 0 0 150 300.0M210 300.0A30.0 30.0 0 0 0 180.0 330M180.0 330A30.0 30.0 0 0 0 150 360.0M210 360.0A30.0 30.0 0 0 0 180.0 390M180.0 390A30.0 30.0 0 0 0 150 420.0M210 420.0A30.0 30.0 0 0 0 180.0 450M180.0 450A30.0 30.0 0 0 0 150 480.0M210 480.0A30.0 30.0 0 0 0 180.0 510M240.0 30A30.0 30.0 0 0 0 210 60.0M270 60.0A30.0 30.0 0 0 0 240.0 90M240.0 90A30.0 30.0 0 0 1 270 120.0M210 120.0A30.0 30.0 0 0 1 240.0 150M240.0 150A30.0 30.0 0 0 0 210 180.0M270 180.0A30.0 30.0 0 0 0 240.0 210M240.0 210A30.0 30.0 0 0 0 210 240.0M270 240.0A30.0 30.0 0 0 0 240.0 270M240.0 270A30.0 30.0 0 0 0 210 300.0M270 300.0A30.0 30.0 0 0 0 240.0 330M240.0 330A30.0 30.0 0 0 0 210 360.0M270 360.0A30.0 30.0 0 0 0 240.0 390M240.0 390A30.0 30.0 0 0 1 270 420.0M210 420.0A30.0 30.0 0 0 1 240.0 450M240.0 450A30.0 30.0 0 0 0 210 480.0M270 480.0A30.0 30.0 0 0 0 240.0 510M300.0 30A30.0 30.0 0 0 0 270 60.0M330 60.0A30.0 30.0 0 0 0 300.0 90M300.0 90A30.0 30.0 0 0 1 330 120.0M270 120.0A30.0 30.0 0 0 1 300.0 150M300.0 150A30.0 30.0 0 0 0 270 180.0M330 180.0A30.0 30.0 0 0 0 300.0 210M300.0 210A30.0 30.0 0 0 0 270 240.0M330 240.0A30.0 30.0 0 0 0 300.0 270M300.0 270A30.0 30.0 0 0 0 270 300.0M330 300.0A30.0 30.0 0 0 0 300.0 330M300.0 330A30.0 30.0 0 0 0 270 360.0M330 360.0A30.0 30.0 0 0 0 300.0 390M300.0 390A30.0 30.0 0 0 1 330 420.0M270 420.0A30.0 30.0 0 0 1 300.0 450M300.0 450A30.0 30.0 0 0 0 270 480.0M330 480.0A30.0 30.0 0 0 0 300.0 510M360.0 30A30.0 30.0 0 0 0 330 60.0M390 60.0A30.0 30.0 0 0 0 360.0 90M360.0 90A30.0 30.0 0 0 0 330 120.0M390 120.0A30.0 30.0 0 0 0 360.0 150M360.0 150A30.0 30.0 0 0 0 330 180.0M390 180.0A30.0 30.0 0 0 0 360.0 210M360.0 210A30.0 30.0 0 0 0 330 240.0M390 240.0A30.0 30.0 0 0 0 360.0 270M360.0 270A30.0 30.0 0 0 0 330 300.0M390 300.0A30.0 30.0 0 0 0 360.0 330M360.0 330A30.0 30.0 0 0 0 330 360.0M390 360.0A30.0 30.0 0 0 0 360.0 390M360.0 390A30.0 30.0 0 0 0 330 420.0M390 420.0A30.0 30.0 0 0 0 360.0 450M360.0 450A30.0 30.0 0 0 0 330 480.0M390 480.0A30.0 30.0 0 0 0 360.0 510M420.0 30A30.0 30.0 0 0 1 450 60.0M390 60.0A30.0 30.0 0 0 1 420.0 90M420.0 90A30.0 30.0 0 0 0 390 120.0M450 120.0A30.0 30.0 0 0 0 420.0 150M420.0 150A30.0 30.0 0 0 0 390 180.0M450 180.0A30.0 30.0 0 0 0 420.0 210M420.0 210A30.0 30.0 0 0 1 450 240.0M390 240.0A30.0 30.0 0 0 1 420.0 270M420.0 270A30.0 30.0 0 0 1 450 300.0M390 300.0A30.0 30.0 0 0 1 420.0 330M420.0 330A30.0 30.0 0 0 0 390 360.0M450 360.0A30.0 30.0 0 0 0 420.0 390M420.0 390A30.0 30.0 0 0 0 390 420.0M450 420.0A30.0 30.0 0 0 0 420.0 450M420.0 450A30.0 30.0 0 0 1 450 480.0M390 480.0A30.0 30.0 0 0 1 420.0 510M480.0 30A30.0 30.0 0 0 0 450 60.0M510 60.0A30.0 30.0 0 0 0 480.0 90M480.0 90A30.0 30.0 0 0 1 510 120.0M450 120.0A30.0 30.0 0 0 1 480.0 150M480.0 150A30.0 30.0 0 0 0 450 180.0M510 180.0A30.0 30.0 0 0 0 480.0 210M480.0 210A30.0 30.0 0 0 0 450 240.0M510 240.0A30.0 30.0 0 0 0 480.0 270M480.0 270A30.0 30.0 0 0 0 450 300.0M510 300.0A30.0 30.0 0 0 0 480.0 330M480.0 330A30.0 30.0 0 0 0 450 360.0M510 360.0A30.0 30.0 0 0 0 480.0 390M480.0 390A30.0 30.0 0 0 1 510 420.0M450 420.0A30.0 30.0 0 0 1 480.0 450M480.0 450A30.0 30.0 0 0 0 450 480.0M510 480.0A30.0 30.0 0 0 0 480.0 510" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><g fill="currentColor"><circle cx="60.0" cy="60.0" r="3.2"/><circle cx="60.0" cy="120.0" r="3.2"/><circle cx="60.0" cy="180.0" r="3.2"/><circle cx="60.0" cy="240.0" r="3.2"/><circle cx="60.0" cy="300.0" r="3.2"/><circle cx="60.0" cy="360.0" r="3.2"/><circle cx="60.0" cy="420.0" r="3.2"/><circle cx="60.0" cy="480.0" r="3.2"/><circle cx="120.0" cy="60.0" r="3.2"/><circle cx="120.0" cy="120.0" r="3.2"/><circle cx="120.0" cy="180.0" r="3.2"/><circle cx="120.0" cy="240.0" r="3.2"/><circle cx="120.0" cy="300.0" r="3.2"/><circle cx="120.0" cy="360.0" r="3.2"/><circle cx="120.0" cy="420.0" r="3.2"/><circle cx="120.0" cy="480.0" r="3.2"/><circle cx="180.0" cy="60.0" r="3.2"/><circle cx="180.0" cy="120.0" r="3.2"/><circle cx="180.0" cy="180.0" r="3.2"/><circle cx="180.0" cy="240.0" r="3.2"/><circle cx="180.0" cy="300.0" r="3.2"/><circle cx="180.0" cy="360.0" r="3.2"/><circle cx="180.0" cy="420.0" r="3.2"/><circle cx="180.0" cy="480.0" r="3.2"/><circle cx="240.0" cy="60.0" r="3.2"/><circle cx="240.0" cy="120.0" r="3.2"/><circle cx="240.0" cy="180.0" r="3.2"/><circle cx="240.0" cy="240.0" r="3.2"/><circle cx="240.0" cy="300.0" r="3.2"/><circle cx="240.0" cy="360.0" r="3.2"/><circle cx="240.0" cy="420.0" r="3.2"/><circle cx="240.0" cy="480.0" r="3.2"/><circle cx="300.0" cy="60.0" r="3.2"/><circle cx="300.0" cy="120.0" r="3.2"/><circle cx="300.0" cy="180.0" r="3.2"/><circle cx="300.0" cy="240.0" r="3.2"/><circle cx="300.0" cy="300.0" r="3.2"/><circle cx="300.0" cy="360.0" r="3.2"/><circle cx="300.0" cy="420.0" r="3.2"/><circle cx="300.0" cy="480.0" r="3.2"/><circle cx="360.0" cy="60.0" r="3.2"/><circle cx="360.0" cy="120.0" r="3.2"/><circle cx="360.0" cy="180.0" r="3.2"/><circle cx="360.0" cy="240.0" r="3.2"/><circle cx="360.0" cy="300.0" r="3.2"/><circle cx="360.0" cy="360.0" r="3.2"/><circle cx="360.0" cy="420.0" r="3.2"/><circle cx="360.0" cy="480.0" r="3.2"/><circle cx="420.0" cy="60.0" r="3.2"/><circle cx="420.0" cy="120.0" r="3.2"/><circle cx="420.0" cy="180.0" r="3.2"/><circle cx="420.0" cy="240.0" r="3.2"/><circle cx="420.0" cy="300.0" r="3.2"/><circle cx="420.0" cy="360.0" r="3.2"/><circle cx="420.0" cy="420.0" r="3.2"/><circle cx="420.0" cy="480.0" r="3.2"/><circle cx="480.0" cy="60.0" r="3.2"/><circle cx="480.0" cy="120.0" r="3.2"/><circle cx="480.0" cy="180.0" r="3.2"/><circle cx="480.0" cy="240.0" r="3.2"/><circle cx="480.0" cy="300.0" r="3.2"/><circle cx="480.0" cy="360.0" r="3.2"/><circle cx="480.0" cy="420.0" r="3.2"/><circle cx="480.0" cy="480.0" r="3.2"/></g></svg>
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <p class="hero-tag">JUG Luanda</p>
+      <h1>Java, entre <em>kambas</em>.</h1>
+      <p class="lede">Somos programadores Java de Angola a aprender, partilhar e trocar ideias. Estudante ou sénior, há sempre lugar para mais um.</p>
+      <div class="actions">
+        <a class="btn btn-sun" href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Entrar no Discord</a>
+        <a class="btn btn-ghost" href="all-events.html">Ver eventos</a>
       </div>
     </div>
-    <div class="hero-image" aria-hidden="true">
-      <svg class="tile-motif" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="312" height="312" rx="20" class="tile-motif-frame"/>
-        <g class="tile-motif-lines">
-          <path d="M16 112 Q64 80 112 112 T208 112 T304 112"/>
-          <path d="M16 208 Q64 176 112 208 T208 208 T304 208"/>
-          <path d="M112 16 Q80 64 112 112 T112 208 T112 304"/>
-          <path d="M208 16 Q176 64 208 112 T208 208 T208 304"/>
-          <line x1="16" y1="16" x2="304" y2="16"/>
-          <line x1="16" y1="304" x2="304" y2="304"/>
-          <line x1="16" y1="16" x2="16" y2="304"/>
-          <line x1="304" y1="16" x2="304" y2="304"/>
-          <circle cx="160" cy="160" r="9"/>
-        </g>
-      </svg>
-    </div>
+    <div class="board" role="group" aria-label="Próxima paragem">
+  <p class="board-label">Próxima paragem</p>
+  <p class="board-line board-main">PRÓXIMO ENCONTRO: A MARCAR</p>
+  <p class="board-line">DATA POR ANUNCIAR · LUANDA</p>
+  <p class="board-foot">1 membro · 1 evento · 6 artigos</p>
+</div>
+
   </div>
 </section>
 
-<section id="about" class="about">
-  <div class="container">
-    <h2>Sobre Nós</h2>
-    <div class="about-content">
-      <div class="about-text">
-        <p>Os Kambas do Java são uma comunidade vibrante de desenvolvedores baseada em Luanda, Angola. Nosso objetivo é promover a linguagem de programação Java e seu ecossistema, através do compartilhamento de conhecimento, networking e colaboração.</p>
-        <p>Organizamos meetups regulares, workshops e eventos para conectar desenvolvedores de todos os níveis, desde iniciantes até experts.</p>
-      </div>
-      <div class="about-stats">
-        <div class="stat">
-          <span class="stat-number">1+</span>
-          <span class="stat-label">Membros</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">1+</span>
-          <span class="stat-label">Eventos</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">1+</span>
-          <span class="stat-label">Artigos</span>
-        </div>
-      </div>
+<section class="block">
+  <div class="wrap">
+    <div class="block-head">
+      <h2>Próximas paragens</h2>
+      <a class="more" href="all-events.html">Todos os eventos →</a>
     </div>
+    <div class="routes"><a class="route" href="events/evento-de-setembro.html">
+  <span class="route-no"><b>—</b><i>breve</i></span>
+  <span class="route-body"><strong>Próximo encontro: a marcar</strong><span>meetup · Luanda</span></span>
+  <span class="route-go" aria-hidden="true">→</span>
+</a>
+</div>
   </div>
 </section>
 
-<section id="members" class="members">
-  <div class="container">
-    <h2>Membros da Comunidade</h2>
-    <div class="members-grid">
-      <div class='member-card'><a href='members/dumijdev.html'><img src='https://github.com/dumijdev.png' alt='dumijdev'><h3>dumijdev</h3></a></div>
+<section class="block block-tint">
+  <div class="wrap">
+    <div class="block-head">
+      <h2>Para ler</h2>
+      <a class="more" href="all-posts.html">Todos os artigos →</a>
     </div>
-    <div class="view-all">
-      <a href="all-members.html" class="btn">Ver Todos os Membros</a>
-    </div>
+    <div class="routes"><a class="route" href="posts/2026/11/java-25-o-que-mudou.html">
+  <span class="route-no"><b>nov</b><i>2026</i></span>
+  <span class="route-body"><strong>Java 25: o que muda no teu dia a dia</strong><span>O Java 25 é a mais recente versão LTS. Estas são as mudanças que sentes logo ao escrever código, sem decorar a lista de JEPs.</span></span>
+  <span class="route-go" aria-hidden="true">→</span>
+</a>
+<a class="route" href="posts/2026/11/porque-o-kambas-do-java-precisa-de-ti.html">
+  <span class="route-no"><b>nov</b><i>2026</i></span>
+  <span class="route-body"><strong>Porque o Kambas do Java precisa de ti</strong><span>Somos uma comunidade pequena e frágil de programadores Java em Luanda. Isto é o que precisamos e como podes ajudar, sem precisar de ser especialista.</span></span>
+  <span class="route-go" aria-hidden="true">→</span>
+</a>
+<a class="route" href="posts/2026/11/records-sealed-e-pattern-matching.html">
+  <span class="route-no"><b>nov</b><i>2026</i></span>
+  <span class="route-body"><strong>Records, sealed e pattern matching: dados bem modelados</strong><span>Três funcionalidades do Java moderno que, juntas, substituem páginas de código repetitivo por poucas linhas legíveis.</span></span>
+  <span class="route-go" aria-hidden="true">→</span>
+</a>
+<a class="route" href="posts/2026/11/virtual-threads-em-dez-minutos.html">
+  <span class="route-no"><b>nov</b><i>2026</i></span>
+  <span class="route-body"><strong>Virtual threads em dez minutos</strong><span>Como as virtual threads permitem servir milhares de pedidos em paralelo com código simples e bloqueante.</span></span>
+  <span class="route-go" aria-hidden="true">→</span>
+</a>
+</div>
   </div>
 </section>
 
-<section class="features">
-  <div class="container">
-    <h2>Por que participar?</h2>
-    <div class="features-grid">
-      <div class="feature">
-        <div class="feature-icon" aria-hidden="true">💡</div>
-        <h3>Aprendizado Contínuo</h3>
-        <p>Compartilhamos conhecimento sobre as últimas tecnologias Java e melhores práticas</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon" aria-hidden="true">👥</div>
-        <h3>Networking</h3>
-        <p>Conecte-se com outros desenvolvedores e empresas da região</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon" aria-hidden="true">🚀</div>
-        <h3>Oportunidades</h3>
-        <p>Descubra novas oportunidades de carreira e colaboração</p>
-      </div>
+<section class="block">
+  <div class="wrap">
+    <div class="block-head">
+      <h2>A bordo</h2>
+      <a class="more" href="all-members.html">Ver membros →</a>
     </div>
+    <div class="people"><a class="person" href="members/dumijdev.html"><span class="avatar" data-i="D"><img src="https://github.com/dumijdev.png" alt="" loading="lazy" onerror="this.remove()"></span><span>dumijdev</span></a><a class="person you" href="posts/2026/11/porque-o-kambas-do-java-precisa-de-ti.html"><span class="avatar" data-i="+"></span><span>O teu lugar</span></a></div>
   </div>
 </section>
 
-<section id="events" class="events">
-  <div class="container">
-    <h2>Próximos Eventos</h2>
-    <div class="events-list">
-      <div class='event'><div class='event-date'><span class='event-day'>22</span><span class='event-month'>agosto</span></div><div class='event-details'><h3><a href='events/evento-de-setembro.html'>evento-de-setembro</a></h3><p class='event-location'>Online</p><p>Venha para o nosso evento de Setembro!</p><a href='events/evento-de-setembro.html' class='event-link'>Mais informações</a></div></div>
-    </div>
-    <div class="view-all">
-      <a href="all-events.html" class="btn">Ver Todos os Eventos</a>
-    </div>
+<section class="block join-block">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 540" class="sona" aria-hidden="true" focusable="false"><path d="M60.0 30A30.0 30.0 0 0 0 30 60.0M90 60.0A30.0 30.0 0 0 0 60.0 90M60.0 90A30.0 30.0 0 0 1 90 120.0M30 120.0A30.0 30.0 0 0 1 60.0 150M60.0 150A30.0 30.0 0 0 0 30 180.0M90 180.0A30.0 30.0 0 0 0 60.0 210M60.0 210A30.0 30.0 0 0 0 30 240.0M90 240.0A30.0 30.0 0 0 0 60.0 270M60.0 270A30.0 30.0 0 0 0 30 300.0M90 300.0A30.0 30.0 0 0 0 60.0 330M60.0 330A30.0 30.0 0 0 0 30 360.0M90 360.0A30.0 30.0 0 0 0 60.0 390M60.0 390A30.0 30.0 0 0 1 90 420.0M30 420.0A30.0 30.0 0 0 1 60.0 450M60.0 450A30.0 30.0 0 0 0 30 480.0M90 480.0A30.0 30.0 0 0 0 60.0 510M120.0 30A30.0 30.0 0 0 1 150 60.0M90 60.0A30.0 30.0 0 0 1 120.0 90M120.0 90A30.0 30.0 0 0 0 90 120.0M150 120.0A30.0 30.0 0 0 0 120.0 150M120.0 150A30.0 30.0 0 0 0 90 180.0M150 180.0A30.0 30.0 0 0 0 120.0 210M120.0 210A30.0 30.0 0 0 1 150 240.0M90 240.0A30.0 30.0 0 0 1 120.0 270M120.0 270A30.0 30.0 0 0 1 150 300.0M90 300.0A30.0 30.0 0 0 1 120.0 330M120.0 330A30.0 30.0 0 0 0 90 360.0M150 360.0A30.0 30.0 0 0 0 120.0 390M120.0 390A30.0 30.0 0 0 0 90 420.0M150 420.0A30.0 30.0 0 0 0 120.0 450M120.0 450A30.0 30.0 0 0 1 150 480.0M90 480.0A30.0 30.0 0 0 1 120.0 510M180.0 30A30.0 30.0 0 0 0 150 60.0M210 60.0A30.0 30.0 0 0 0 180.0 90M180.0 90A30.0 30.0 0 0 0 150 120.0M210 120.0A30.0 30.0 0 0 0 180.0 150M180.0 150A30.0 30.0 0 0 0 150 180.0M210 180.0A30.0 30.0 0 0 0 180.0 210M180.0 210A30.0 30.0 0 0 0 150 240.0M210 240.0A30.0 30.0 0 0 0 180.0 270M180.0 270A30.0 30.0 0 0 0 150 300.0M210 300.0A30.0 30.0 0 0 0 180.0 330M180.0 330A30.0 30.0 0 0 0 150 360.0M210 360.0A30.0 30.0 0 0 0 180.0 390M180.0 390A30.0 30.0 0 0 0 150 420.0M210 420.0A30.0 30.0 0 0 0 180.0 450M180.0 450A30.0 30.0 0 0 0 150 480.0M210 480.0A30.0 30.0 0 0 0 180.0 510M240.0 30A30.0 30.0 0 0 0 210 60.0M270 60.0A30.0 30.0 0 0 0 240.0 90M240.0 90A30.0 30.0 0 0 1 270 120.0M210 120.0A30.0 30.0 0 0 1 240.0 150M240.0 150A30.0 30.0 0 0 0 210 180.0M270 180.0A30.0 30.0 0 0 0 240.0 210M240.0 210A30.0 30.0 0 0 0 210 240.0M270 240.0A30.0 30.0 0 0 0 240.0 270M240.0 270A30.0 30.0 0 0 0 210 300.0M270 300.0A30.0 30.0 0 0 0 240.0 330M240.0 330A30.0 30.0 0 0 0 210 360.0M270 360.0A30.0 30.0 0 0 0 240.0 390M240.0 390A30.0 30.0 0 0 1 270 420.0M210 420.0A30.0 30.0 0 0 1 240.0 450M240.0 450A30.0 30.0 0 0 0 210 480.0M270 480.0A30.0 30.0 0 0 0 240.0 510M300.0 30A30.0 30.0 0 0 0 270 60.0M330 60.0A30.0 30.0 0 0 0 300.0 90M300.0 90A30.0 30.0 0 0 1 330 120.0M270 120.0A30.0 30.0 0 0 1 300.0 150M300.0 150A30.0 30.0 0 0 0 270 180.0M330 180.0A30.0 30.0 0 0 0 300.0 210M300.0 210A30.0 30.0 0 0 0 270 240.0M330 240.0A30.0 30.0 0 0 0 300.0 270M300.0 270A30.0 30.0 0 0 0 270 300.0M330 300.0A30.0 30.0 0 0 0 300.0 330M300.0 330A30.0 30.0 0 0 0 270 360.0M330 360.0A30.0 30.0 0 0 0 300.0 390M300.0 390A30.0 30.0 0 0 1 330 420.0M270 420.0A30.0 30.0 0 0 1 300.0 450M300.0 450A30.0 30.0 0 0 0 270 480.0M330 480.0A30.0 30.0 0 0 0 300.0 510M360.0 30A30.0 30.0 0 0 0 330 60.0M390 60.0A30.0 30.0 0 0 0 360.0 90M360.0 90A30.0 30.0 0 0 0 330 120.0M390 120.0A30.0 30.0 0 0 0 360.0 150M360.0 150A30.0 30.0 0 0 0 330 180.0M390 180.0A30.0 30.0 0 0 0 360.0 210M360.0 210A30.0 30.0 0 0 0 330 240.0M390 240.0A30.0 30.0 0 0 0 360.0 270M360.0 270A30.0 30.0 0 0 0 330 300.0M390 300.0A30.0 30.0 0 0 0 360.0 330M360.0 330A30.0 30.0 0 0 0 330 360.0M390 360.0A30.0 30.0 0 0 0 360.0 390M360.0 390A30.0 30.0 0 0 0 330 420.0M390 420.0A30.0 30.0 0 0 0 360.0 450M360.0 450A30.0 30.0 0 0 0 330 480.0M390 480.0A30.0 30.0 0 0 0 360.0 510M420.0 30A30.0 30.0 0 0 1 450 60.0M390 60.0A30.0 30.0 0 0 1 420.0 90M420.0 90A30.0 30.0 0 0 0 390 120.0M450 120.0A30.0 30.0 0 0 0 420.0 150M420.0 150A30.0 30.0 0 0 0 390 180.0M450 180.0A30.0 30.0 0 0 0 420.0 210M420.0 210A30.0 30.0 0 0 1 450 240.0M390 240.0A30.0 30.0 0 0 1 420.0 270M420.0 270A30.0 30.0 0 0 1 450 300.0M390 300.0A30.0 30.0 0 0 1 420.0 330M420.0 330A30.0 30.0 0 0 0 390 360.0M450 360.0A30.0 30.0 0 0 0 420.0 390M420.0 390A30.0 30.0 0 0 0 390 420.0M450 420.0A30.0 30.0 0 0 0 420.0 450M420.0 450A30.0 30.0 0 0 1 450 480.0M390 480.0A30.0 30.0 0 0 1 420.0 510M480.0 30A30.0 30.0 0 0 0 450 60.0M510 60.0A30.0 30.0 0 0 0 480.0 90M480.0 90A30.0 30.0 0 0 1 510 120.0M450 120.0A30.0 30.0 0 0 1 480.0 150M480.0 150A30.0 30.0 0 0 0 450 180.0M510 180.0A30.0 30.0 0 0 0 480.0 210M480.0 210A30.0 30.0 0 0 0 450 240.0M510 240.0A30.0 30.0 0 0 0 480.0 270M480.0 270A30.0 30.0 0 0 0 450 300.0M510 300.0A30.0 30.0 0 0 0 480.0 330M480.0 330A30.0 30.0 0 0 0 450 360.0M510 360.0A30.0 30.0 0 0 0 480.0 390M480.0 390A30.0 30.0 0 0 1 510 420.0M450 420.0A30.0 30.0 0 0 1 480.0 450M480.0 450A30.0 30.0 0 0 0 450 480.0M510 480.0A30.0 30.0 0 0 0 480.0 510" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><g fill="currentColor"><circle cx="60.0" cy="60.0" r="3.2"/><circle cx="60.0" cy="120.0" r="3.2"/><circle cx="60.0" cy="180.0" r="3.2"/><circle cx="60.0" cy="240.0" r="3.2"/><circle cx="60.0" cy="300.0" r="3.2"/><circle cx="60.0" cy="360.0" r="3.2"/><circle cx="60.0" cy="420.0" r="3.2"/><circle cx="60.0" cy="480.0" r="3.2"/><circle cx="120.0" cy="60.0" r="3.2"/><circle cx="120.0" cy="120.0" r="3.2"/><circle cx="120.0" cy="180.0" r="3.2"/><circle cx="120.0" cy="240.0" r="3.2"/><circle cx="120.0" cy="300.0" r="3.2"/><circle cx="120.0" cy="360.0" r="3.2"/><circle cx="120.0" cy="420.0" r="3.2"/><circle cx="120.0" cy="480.0" r="3.2"/><circle cx="180.0" cy="60.0" r="3.2"/><circle cx="180.0" cy="120.0" r="3.2"/><circle cx="180.0" cy="180.0" r="3.2"/><circle cx="180.0" cy="240.0" r="3.2"/><circle cx="180.0" cy="300.0" r="3.2"/><circle cx="180.0" cy="360.0" r="3.2"/><circle cx="180.0" cy="420.0" r="3.2"/><circle cx="180.0" cy="480.0" r="3.2"/><circle cx="240.0" cy="60.0" r="3.2"/><circle cx="240.0" cy="120.0" r="3.2"/><circle cx="240.0" cy="180.0" r="3.2"/><circle cx="240.0" cy="240.0" r="3.2"/><circle cx="240.0" cy="300.0" r="3.2"/><circle cx="240.0" cy="360.0" r="3.2"/><circle cx="240.0" cy="420.0" r="3.2"/><circle cx="240.0" cy="480.0" r="3.2"/><circle cx="300.0" cy="60.0" r="3.2"/><circle cx="300.0" cy="120.0" r="3.2"/><circle cx="300.0" cy="180.0" r="3.2"/><circle cx="300.0" cy="240.0" r="3.2"/><circle cx="300.0" cy="300.0" r="3.2"/><circle cx="300.0" cy="360.0" r="3.2"/><circle cx="300.0" cy="420.0" r="3.2"/><circle cx="300.0" cy="480.0" r="3.2"/><circle cx="360.0" cy="60.0" r="3.2"/><circle cx="360.0" cy="120.0" r="3.2"/><circle cx="360.0" cy="180.0" r="3.2"/><circle cx="360.0" cy="240.0" r="3.2"/><circle cx="360.0" cy="300.0" r="3.2"/><circle cx="360.0" cy="360.0" r="3.2"/><circle cx="360.0" cy="420.0" r="3.2"/><circle cx="360.0" cy="480.0" r="3.2"/><circle cx="420.0" cy="60.0" r="3.2"/><circle cx="420.0" cy="120.0" r="3.2"/><circle cx="420.0" cy="180.0" r="3.2"/><circle cx="420.0" cy="240.0" r="3.2"/><circle cx="420.0" cy="300.0" r="3.2"/><circle cx="420.0" cy="360.0" r="3.2"/><circle cx="420.0" cy="420.0" r="3.2"/><circle cx="420.0" cy="480.0" r="3.2"/><circle cx="480.0" cy="60.0" r="3.2"/><circle cx="480.0" cy="120.0" r="3.2"/><circle cx="480.0" cy="180.0" r="3.2"/><circle cx="480.0" cy="240.0" r="3.2"/><circle cx="480.0" cy="300.0" r="3.2"/><circle cx="480.0" cy="360.0" r="3.2"/><circle cx="480.0" cy="420.0" r="3.2"/><circle cx="480.0" cy="480.0" r="3.2"/></g></svg>
+  <div class="wrap">
+    <h2>Apanha a próxima.</h2>
+    <p class="lede">Os anúncios, as dúvidas e a conversa do dia a dia estão no Discord. Os vídeos no YouTube. O código no GitHub.</p>
+    <p class="call">Somos poucos e queremos ser mais. <a href="posts/2026/11/porque-o-kambas-do-java-precisa-de-ti.html">Lê porque precisamos de ti →</a></p>
+    <ul class="channels">
+      <li><a href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Discord <span aria-hidden="true">→</span></a></li>
+      <li><a href="https://www.youtube.com/@KambasdoJava" target="_blank" rel="noopener">YouTube <span aria-hidden="true">→</span></a></li>
+      <li><a href="https://www.linkedin.com/company/kambas-do-java/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">→</span></a></li>
+      <li><a href="https://github.com/kambas-do-java" target="_blank" rel="noopener">GitHub <span aria-hidden="true">→</span></a></li>
+    </ul>
   </div>
 </section>
 
-<section class="recent-posts">
-  <div class="container">
-    <h2>Artigos Recentes</h2>
-    <div class="posts-grid">
-      <div class='post-preview'><h3><a href='posts/2025/01/intro.html'>Introdução ao Java 17</a></h3><p class='post-meta'>01/2025</p><p>Esta é a descrição do post</p></div>
-    </div>
-    <div class="view-all">
-      <a href="all-posts.html" class="btn">Ver Todos os Artigos</a>
-    </div>
-  </div>
-</section>
+  </main>
 
-<section id="contact" class="contact">
-  <div class="container">
-    <h2>Entre em Contato</h2>
-    <div class="contact-content contact-content--single">
-      <div class="contact-info">
-        <h3>Junte-se à nossa comunidade</h3>
-        <p>Participe das nossas discussões e eventos através dos nossos canais</p>
-        <div class="social-links">
-          <a href="https://www.youtube.com/@KambasdoJava" target="_blank" class="social-link youtube">YouTube</a>
-          <a href="https://www.linkedin.com/company/kambas-do-java/" target="_blank" class="social-link linkedin">LinkedIn</a>
-          <a href="https://discord.gg/F9Q4f2gkHe" target="_blank" class="social-link discord">Discord</a>
-          <a href="https://github.com/kambas-do-java/" target="_blank" class="social-link github">GitHub</a>
-        </div>
+  <footer class="foot">
+    <div class="livery" aria-hidden="true"></div>
+    <div class="wrap foot-in">
+      <div>
+        <p class="foot-name">Kambas do Java</p>
+        <p>JUG Luanda. Programadores Java de Angola, a aprender em conjunto.</p>
       </div>
+      <ul class="foot-links">
+        <li><a href="https://www.youtube.com/@KambasdoJava" target="_blank" rel="noopener">YouTube</a></li>
+        <li><a href="https://www.linkedin.com/company/kambas-do-java/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Discord</a></li>
+        <li><a href="https://github.com/kambas-do-java" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p class="foot-small">© 2026 Kambas do Java · Feito em Luanda</p>
     </div>
-  </div>
-</section>
-    </main>
-
-    <footer>
-      <div class="container">
-        <div class="footer-content">
-          <div class="footer-section">
-            <h3>Kambas do Java</h3>
-            <p>Comunidade de desenvolvedores Java de Luanda, Angola</p>
-          </div>
-          <div class="footer-section">
-            <h3>Conecte-se</h3>
-            <div class="social-links">
-              <a href="https://www.youtube.com/@KambasdoJava" target="_blank">YouTube</a>
-              <a href="https://www.linkedin.com/company/kambas-do-java/" target="_blank">LinkedIn</a>
-              <a href="https://discord.gg/F9Q4f2gkHe" target="_blank">Discord</a>
-              <a href="https://github.com/kambas-do-java/" target="_blank">GitHub</a>
-            </div>
-          </div>
-          <div class="footer-section">
-            <h3>Links Úteis</h3>
-            <ul>
-              <li><a href="all-posts.html">Todos os Artigos</a></li>
-              <li><a href="all-events.html">Todos os Eventos</a></li>
-              <li><a href="all-members.html">Todos os Membros</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <p>&copy; 2026 Kambas do Java - Todos os direitos reservados</p>
-        </div>
-      </div>
-    </footer>
-    <script src="assets/js/main.js"></script>
-  </body>
+  </footer>
+  <script src="assets/js/main.js" defer></script>
+</body>
 </html>

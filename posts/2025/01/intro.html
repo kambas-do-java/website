@@ -1,126 +1,83 @@
 <!DOCTYPE html>
-<html lang="pt">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Esta é a descrição do post">
-    <meta name="keywords" content="java, luanda, angola, desenvolvedores, programação, jug, kambas">
-    <meta name="author" content="Kambas do Java">
-    <title>Introdução ao Java 17 - Kambas do Java</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../../assets/css/style.css">
-    <link rel="icon" href="../../../assets/images/logo.png" type="image/png">
-  </head>
-  <body>
-    <header>
-      <div class="container">
-        <div class="logo">
-          <a href="../../../index.html">
-            <img src="../../../assets/images/logo.png" alt="Kambas do Java">
-            <span>Kambas do Java</span>
-          </a>
-        </div>
-        <button type="button" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-        <nav>
-          <ul>
-            <li><a href="../../../index.html">Início</a></li>
-            <li><a href="../../../all-posts.html">Artigos</a></li>
-            <li><a href="../../../all-events.html">Eventos</a></li>
-            <li><a href="../../../all-members.html">Membros</a></li>
-            <li><a href="../../../index.html#contact">Contato</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-
-    <main>
-      <article class="post-article">
-  <header class="article-header">
-    <h1>Introdução ao Java 17</h1>
-    <div class="article-meta">
-      <span class="publish-date">Publicado em: 01/2025</span>
-      <div class="social-share">
-        <span>Compartilhar:</span>
-        <a href="https://twitter.com/intent/tweet?text=Introdução ao Java 17&url=[URL_DO_POST]" target="_blank" class="social-icon twitter">Twitter</a>
-        <a href="https://www.linkedin.com/sharing/share-offsite/?url=[URL_DO_POST]" target="_blank" class="social-icon linkedin">LinkedIn</a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u=[URL_DO_POST]" target="_blank" class="social-icon facebook">Facebook</a>
-      </div>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Introdução ao Java 17 · Kambas do Java</title>
+  <meta name="description" content="As novidades do Java 17 que mudaram a forma de modelar classes: sealed classes e pattern matching.">
+  <meta name="theme-color" content="#C8102E">
+  <meta property="og:title" content="Introdução ao Java 17 · Kambas do Java">
+  <meta property="og:description" content="As novidades do Java 17 que mudaram a forma de modelar classes: sealed classes e pattern matching.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="../../../assets/images/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Figtree:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Saltar para o conteúdo</a>
+  <header class="top">
+    <div class="wrap top-in">
+      <a class="brand" href="../../../index.html">
+        <img src="../../../assets/images/logo.svg" alt="" width="40" height="40">
+        <span>Kambas<br>do Java</span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+      <nav id="nav" aria-label="Principal">
+        <a href="../../../index.html">Início</a>
+        <a href="../../../all-posts.html" aria-current="page">Artigos</a>
+        <a href="../../../all-events.html">Eventos</a>
+        <a href="../../../all-members.html">Membros</a>
+        <a class="join" href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Entrar no Discord</a>
+      </nav>
     </div>
+    <div class="livery" aria-hidden="true"></div>
   </header>
 
-  <div class="article-content">
-    <p>Introdução ao Java 17</p>
-<p>Este é o primeiro post da comunidade Kambas do Java! Vamos explorar as novidades do Java 17.</p>
-<h2>Novidades do Java 17</h2>
-<ul>
-<li>Sealed Classes: permitem controlar quais classes podem estender uma classe</li>
-<li>Pattern Matching: simplifica a verificação de tipos e casting</li>
-<li>Novos métodos em classes utilitárias</li>
-</ul>
-<h2>Como usar</h2>
+  <main id="main">
+<article>
+  <header class="page-head">
+    <div class="wrap narrow">
+      <p class="back"><a href="../../../all-posts.html">← Artigos</a></p>
+      <h1>Introdução ao Java 17</h1>
+      <p class="byline">Dumilde Fernando · 1 de janeiro de 2025 · 1 min de leitura</p>
+      <ul class="tags"><li>Java</li><li>Java 17</li><li>Começar</li></ul>
+    </div>
+  </header>
+  <div class="wrap narrow prose">
+<p>Este foi o primeiro artigo da comunidade Kambas do Java. O Java 17 é uma versão LTS e trouxe ferramentas que ainda hoje usamos todos os dias.</p>
+<h3>Novidades do Java 17</h3>
+<ul><li><strong>Sealed classes:</strong> controlam quais classes podem estender uma classe.</li><li><strong>Pattern matching:</strong> simplifica a verificação de tipos e o casting.</li><li><strong>Novos métodos</strong> em classes utilitárias.</li></ul>
+<h3>Como usar</h3>
+<pre><code class="language-java">public sealed class Shape permits Circle, Square {
+}
+
+public final class Circle extends Shape {
+    private double radius;
+}</code></pre>
 
   </div>
-
-  <footer class="article-footer">
-    <div class="article-navigation">
-      <a href="../../../all-posts.html" class="btn btn-outline">← Voltar para todos os artigos</a>
-    </div>
-  </footer>
 </article>
 
-<section class="newsletter-cta">
-  <div class="container">
-    <h2>Junte-se à comunidade</h2>
-    <p>Acompanhe os próximos artigos e eventos nos nossos canais</p>
-    <div class="cta-buttons">
-      <a href="../../../index.html#contact" class="btn btn-primary">Entrar em Contato</a>
-    </div>
-  </div>
-</section>
+  </main>
 
-<script>
-  document.querySelectorAll('.social-icon').forEach(link => {
-    if (link.href.includes('[URL_DO_POST]')) {
-     link.href = link.href.replace('[URL_DO_POST]', encodeURIComponent(window.location.href));
-    }
-  });
-</script>
-    </main>
-
-    <footer>
-      <div class="container">
-        <div class="footer-content">
-          <div class="footer-section">
-            <h3>Kambas do Java</h3>
-            <p>Comunidade de desenvolvedores Java de Luanda, Angola</p>
-          </div>
-          <div class="footer-section">
-            <h3>Conecte-se</h3>
-            <div class="social-links">
-              <a href="https://www.youtube.com/@KambasdoJava" target="_blank">YouTube</a>
-              <a href="https://www.linkedin.com/company/kambas-do-java/" target="_blank">LinkedIn</a>
-              <a href="https://discord.gg/F9Q4f2gkHe" target="_blank">Discord</a>
-              <a href="https://github.com/kambas-do-java/" target="_blank">GitHub</a>
-            </div>
-          </div>
-          <div class="footer-section">
-            <h3>Links Úteis</h3>
-            <ul>
-              <li><a href="../../../all-posts.html">Todos os Artigos</a></li>
-              <li><a href="../../../all-events.html">Todos os Eventos</a></li>
-              <li><a href="../../../all-members.html">Todos os Membros</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <p>&copy; 2026 Kambas do Java - Todos os direitos reservados</p>
-        </div>
+  <footer class="foot">
+    <div class="livery" aria-hidden="true"></div>
+    <div class="wrap foot-in">
+      <div>
+        <p class="foot-name">Kambas do Java</p>
+        <p>JUG Luanda. Programadores Java de Angola, a aprender em conjunto.</p>
       </div>
-    </footer>
-    <script src="../../../assets/js/main.js"></script>
-  </body>
+      <ul class="foot-links">
+        <li><a href="https://www.youtube.com/@KambasdoJava" target="_blank" rel="noopener">YouTube</a></li>
+        <li><a href="https://www.linkedin.com/company/kambas-do-java/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Discord</a></li>
+        <li><a href="https://github.com/kambas-do-java" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p class="foot-small">© 2026 Kambas do Java · Feito em Luanda</p>
+    </div>
+  </footer>
+  <script src="../../../assets/js/main.js" defer></script>
+</body>
 </html>

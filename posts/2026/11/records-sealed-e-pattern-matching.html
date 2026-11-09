@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Records, sealed e pattern matching: dados bem modelados · Kambas do Java</title>
+  <meta name="description" content="Três funcionalidades do Java moderno que, juntas, substituem páginas de código repetitivo por poucas linhas legíveis.">
+  <meta name="theme-color" content="#C8102E">
+  <meta property="og:title" content="Records, sealed e pattern matching: dados bem modelados · Kambas do Java">
+  <meta property="og:description" content="Três funcionalidades do Java moderno que, juntas, substituem páginas de código repetitivo por poucas linhas legíveis.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="../../../assets/images/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Figtree:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Saltar para o conteúdo</a>
+  <header class="top">
+    <div class="wrap top-in">
+      <a class="brand" href="../../../index.html">
+        <img src="../../../assets/images/logo.svg" alt="" width="40" height="40">
+        <span>Kambas<br>do Java</span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+      <nav id="nav" aria-label="Principal">
+        <a href="../../../index.html">Início</a>
+        <a href="../../../all-posts.html" aria-current="page">Artigos</a>
+        <a href="../../../all-events.html">Eventos</a>
+        <a href="../../../all-members.html">Membros</a>
+        <a class="join" href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Entrar no Discord</a>
+      </nav>
+    </div>
+    <div class="livery" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+<article>
+  <header class="page-head">
+    <div class="wrap narrow">
+      <p class="back"><a href="../../../all-posts.html">← Artigos</a></p>
+      <h1>Records, sealed e pattern matching: dados bem modelados</h1>
+      <p class="byline">Dumilde Fernando · 7 de novembro de 2026 · 2 min de leitura</p>
+      <ul class="tags"><li>Java 21</li><li>Records</li><li>Pattern Matching</li></ul>
+    </div>
+  </header>
+  <div class="wrap narrow prose">
+<p>Durante anos, modelar dados em Java significava escrever getters, <code>equals</code>, <code>hashCode</code> e <code>toString</code> à mão. O Java moderno resolve isto com três peças que se complementam.</p>
+<h3>Records: dados sem cerimónia</h3>
+<pre><code class="language-java">record Pagamento(String referencia, long kwanzas) {}</code></pre>
+<p>Uma linha dá-te construtor, acessores, <code>equals</code>, <code>hashCode</code> e <code>toString</code>. Os records são imutáveis, o que evita uma classe inteira de bugs.</p>
+<h3>Sealed: fechar as opções</h3>
+<p>Uma interface <code>sealed</code> diz exatamente quem a pode implementar:</p>
+<pre><code class="language-java">sealed interface Metodo permits Multicaixa, Referencia, Dinheiro {}
+record Multicaixa(String cartao) implements Metodo {}
+record Referencia(String codigo) implements Metodo {}
+record Dinheiro() implements Metodo {}</code></pre>
+<h3>Pattern matching: usar tudo junto</h3>
+<p>O <code>switch</code> conhece as opções e o compilador avisa se esqueceste alguma:</p>
+<pre><code class="language-java">String descrever(Metodo m) {
+    return switch (m) {
+        case Multicaixa(var cartao) -&gt; &quot;Cartão &quot; + cartao;
+        case Referencia(var codigo) -&gt; &quot;Referência &quot; + codigo;
+        case Dinheiro() -&gt; &quot;Dinheiro&quot;;
+    };
+}</code></pre>
+<p>Se amanhã adicionares <code>Transferencia</code> à interface, este código deixa de compilar até tratares o novo caso. O compilador passa a ser o teu revisor.</p>
+<h3>Quando usar</h3>
+<ul><li><strong>Records</strong> para dados que passam de um lado para o outro.</li><li><strong>Sealed</strong> quando o conjunto de variantes é conhecido e fechado.</li><li><strong>Switch com patterns</strong> para decidir por tipo sem cadeias de <code>instanceof</code>.</li></ul>
+<p>Funciona desde o Java 21. Se ainda não migraste, é uma boa razão.</p>
+
+  </div>
+</article>
+
+  </main>
+
+  <footer class="foot">
+    <div class="livery" aria-hidden="true"></div>
+    <div class="wrap foot-in">
+      <div>
+        <p class="foot-name">Kambas do Java</p>
+        <p>JUG Luanda. Programadores Java de Angola, a aprender em conjunto.</p>
+      </div>
+      <ul class="foot-links">
+        <li><a href="https://www.youtube.com/@KambasdoJava" target="_blank" rel="noopener">YouTube</a></li>
+        <li><a href="https://www.linkedin.com/company/kambas-do-java/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Discord</a></li>
+        <li><a href="https://github.com/kambas-do-java" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p class="foot-small">© 2026 Kambas do Java · Feito em Luanda</p>
+    </div>
+  </footer>
+  <script src="../../../assets/js/main.js" defer></script>
+</body>
+</html>
