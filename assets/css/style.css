@@ -39,7 +39,7 @@ h2 { font-size: clamp(1.9rem, 4.5vw, 3rem); }
 .top { background: var(--white); position: sticky; top: 0; z-index: 5; }
 .top-in { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: .6rem; }
 .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; color: var(--ink); font: 900 1.2rem/.9 var(--display); text-transform: uppercase; letter-spacing: .01em; }
-.brand img { border-radius: 10px; }
+.brand img { display: block; margin-block: -14px; margin-left: -10px; }
 nav { display: flex; align-items: center; gap: .25rem; }
 nav a { color: var(--ink); text-decoration: none; font-weight: 700; padding: .55rem .8rem; border-radius: 6px; }
 nav a:hover { background: var(--tint); color: var(--ink); }
