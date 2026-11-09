@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Strategy: trocar o algoritmo sem if em cadeia · Kambas do Java</title>
+  <meta name="description" content="O padrão Strategy em Java moderno: uma interface funcional e lambdas substituem hierarquias inteiras de classes.">
+  <meta name="theme-color" content="#C8102E">
+  <meta property="og:title" content="Strategy: trocar o algoritmo sem if em cadeia · Kambas do Java">
+  <meta property="og:description" content="O padrão Strategy em Java moderno: uma interface funcional e lambdas substituem hierarquias inteiras de classes.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="../../../assets/images/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Figtree:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Saltar para o conteúdo</a>
+  <header class="top">
+    <div class="wrap top-in">
+      <a class="brand" href="../../../index.html">
+        <img src="../../../assets/images/logo.png" alt="" width="80" height="80">
+        <span>Kambas<br>do Java</span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+      <nav id="nav" aria-label="Principal">
+        <a href="../../../index.html">Início</a>
+        <a href="../../../all-posts.html" aria-current="page">Artigos</a>
+        <a href="../../../all-events.html">Eventos</a>
+        <a href="../../../all-members.html">Membros</a>
+        <a class="join" href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Entrar no Discord</a>
+      </nav>
+    </div>
+    <div class="livery" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+<article>
+  <header class="page-head">
+    <div class="wrap narrow">
+      <p class="back"><a href="../../../all-posts.html">← Artigos</a></p>
+      <h1>Strategy: trocar o algoritmo sem if em cadeia</h1>
+      <p class="byline">Dumilde Fernando · 9 de novembro de 2026 · 2 min de leitura</p>
+      <ul class="tags"><li><a href="../../../all-posts.html?tag=Design+Patterns">Design Patterns</a></li><li><a href="../../../all-posts.html?tag=Java+25">Java 25</a></li><li><a href="../../../all-posts.html?tag=Lambdas">Lambdas</a></li></ul>
+    </div>
+  </header>
+  <div class="wrap narrow prose">
+<p>Série de design patterns em Java moderno: o que sobrou de cada padrão clássico quando a linguagem já tem records, lambdas e pattern matching.</p>
+<h3>O problema</h3>
+<p>Tens uma regra que muda conforme o contexto, por exemplo o desconto de um pedido. A tentação é uma cadeia de <code>if/else</code> que cresce a cada campanha nova:</p>
+<pre><code class="language-java">if (tipo.equals(&quot;blackfriday&quot;)) { ... }
+else if (tipo.equals(&quot;fiel&quot;)) { ... }
+else if (tipo.equals(&quot;nenhum&quot;)) { ... }</code></pre>
+<p>Cada desconto novo obriga a mexer no mesmo método.</p>
+<h3>O padrão</h3>
+<p>O Strategy isola cada algoritmo atrás de uma interface comum. Em Java moderno, a interface é <strong>funcional</strong> e cada estratégia é uma lambda:</p>
+<pre><code class="language-java">import java.util.Map;
+
+@FunctionalInterface
+interface Desconto { double aplicar(double preco); }
+
+record Pedido(double total) {
+    double comDesconto(Desconto d) { return d.aplicar(total); }
+}
+
+void main() {
+    Map&lt;String, Desconto&gt; descontos = Map.of(
+        &quot;nenhum&quot;, p -&gt; p,
+        &quot;blackfriday&quot;, p -&gt; p * 0.8,
+        &quot;fiel&quot;, p -&gt; p - Math.min(p, 5_000));
+
+    var pedido = new Pedido(40_000);
+    IO.println(pedido.comDesconto(descontos.get(&quot;blackfriday&quot;))); // 32000.0
+    IO.println(pedido.comDesconto(descontos.get(&quot;fiel&quot;)));        // 35000.0
+}</code></pre>
+<p>Grava num ficheiro <code>Strategy.java</code> e corre <code>java Strategy.java</code>.</p>
+<h3>O que ganhaste</h3>
+<ul><li><strong>Acrescentar um desconto</strong> é acrescentar uma linha ao mapa. O <code>Pedido</code> não muda.</li><li><strong>Cada estratégia testa-se sozinha</strong>, porque é só uma função.</li><li><strong>Sem classes</strong> <code>DescontoBlackFriday</code>, <code>DescontoFiel</code>, e por aí fora.</li></ul>
+<h3>Já o usas sem saber</h3>
+<p>O <code>Comparator</code> é um Strategy: <code>lista.sort(Comparator.comparing(Pedido::total))</code> passa o algoritmo de ordenação como argumento.</p>
+<h3>Quando ainda vale a pena uma classe</h3>
+<p>Se a estratégia tem estado, várias operações ou precisa de configuração própria, uma classe que implementa a interface continua a ser a melhor opção. Para uma única função, a lambda chega.</p>
+
+  </div>
+</article>
+
+  </main>
+
+  <footer class="foot">
+    <div class="livery" aria-hidden="true"></div>
+    <div class="wrap foot-in">
+      <div>
+        <p class="foot-name">Kambas do Java</p>
+        <p>JUG Luanda. Programadores Java de Angola, a aprender em conjunto.</p>
+      </div>
+      <ul class="foot-links">
+        <li><a href="https://www.youtube.com/@KambasdoJava" target="_blank" rel="noopener">YouTube</a></li>
+        <li><a href="https://www.linkedin.com/company/kambas-do-java/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Discord</a></li>
+        <li><a href="https://github.com/kambas-do-java" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p class="foot-small">© 2026 Kambas do Java · Feito em Luanda</p>
+    </div>
+  </footer>
+  <script src="../../../assets/js/main.js" defer></script>
+</body>
+</html>

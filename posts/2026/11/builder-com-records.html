@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Builder e Factory: records com validação · Kambas do Java</title>
+  <meta name="description" content="Quando um record chega, quando precisas de Builder e como validar dados na construção.">
+  <meta name="theme-color" content="#C8102E">
+  <meta property="og:title" content="Builder e Factory: records com validação · Kambas do Java">
+  <meta property="og:description" content="Quando um record chega, quando precisas de Builder e como validar dados na construção.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="../../../assets/images/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Figtree:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Saltar para o conteúdo</a>
+  <header class="top">
+    <div class="wrap top-in">
+      <a class="brand" href="../../../index.html">
+        <img src="../../../assets/images/logo.png" alt="" width="80" height="80">
+        <span>Kambas<br>do Java</span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+      <nav id="nav" aria-label="Principal">
+        <a href="../../../index.html">Início</a>
+        <a href="../../../all-posts.html" aria-current="page">Artigos</a>
+        <a href="../../../all-events.html">Eventos</a>
+        <a href="../../../all-members.html">Membros</a>
+        <a class="join" href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Entrar no Discord</a>
+      </nav>
+    </div>
+    <div class="livery" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+<article>
+  <header class="page-head">
+    <div class="wrap narrow">
+      <p class="back"><a href="../../../all-posts.html">← Artigos</a></p>
+      <h1>Builder e Factory: records com validação</h1>
+      <p class="byline">Dumilde Fernando · 9 de novembro de 2026 · 2 min de leitura</p>
+      <ul class="tags"><li><a href="../../../all-posts.html?tag=Design+Patterns">Design Patterns</a></li><li><a href="../../../all-posts.html?tag=Java+25">Java 25</a></li><li><a href="../../../all-posts.html?tag=Records">Records</a></li></ul>
+    </div>
+  </header>
+  <div class="wrap narrow prose">
+<p>O Builder resolve dois problemas: construtores com muitos parâmetros e objetos que podem ficar num estado inválido. Os records tiram metade do trabalho.</p>
+<h3>Validar no construtor compacto</h3>
+<p>Um record valida logo na criação, sem Builder:</p>
+<pre><code class="language-java">record Utilizador(String nome, String email, int idade) {
+    Utilizador {
+        if (nome == null || nome.isBlank()) throw new IllegalArgumentException(&quot;nome obrigatório&quot;);
+        if (idade &lt; 0) throw new IllegalArgumentException(&quot;idade inválida&quot;);
+    }
+}</code></pre>
+<p>Um <code>Utilizador</code> inválido nunca existe, porque o construtor recusa.</p>
+<h3>&quot;Withers&quot; manuais</h3>
+<p>Os records são imutáveis, por isso uma alteração cria uma nova instância:</p>
+<pre><code class="language-java">record Utilizador(String nome, String email, int idade) {
+    Utilizador {
+        if (nome == null || nome.isBlank()) throw new IllegalArgumentException(&quot;nome obrigatório&quot;);
+        if (idade &lt; 0) throw new IllegalArgumentException(&quot;idade inválida&quot;);
+    }
+
+    Utilizador comEmail(String novo) { return new Utilizador(nome, novo, idade); }
+}
+
+void main() {
+    var u = new Utilizador(&quot;Ana&quot;, null, 30).comEmail(&quot;ana@exemplo.ao&quot;);
+    IO.println(u); // Utilizador[nome=Ana, email=ana@exemplo.ao, idade=30]
+}</code></pre>
+<h3>Quando ainda precisas de Builder</h3>
+<ul><li><strong>Muitos parâmetros opcionais</strong> (mais de quatro ou cinco), em que a ordem baralha.</li><li><strong>Construção em passos</strong>, com regras que só se verificam no fim.</li><li><strong>Objetos que não são records</strong>, como classes com herança.</li></ul>
+<p>Um Builder mínimo para esse caso:</p>
+<pre><code class="language-java">class Pedido {
+    private final String cliente;
+    private final int quantidade;
+
+    private Pedido(Builder b) { cliente = b.cliente; quantidade = b.quantidade; }
+
+    static class Builder {
+        private String cliente;
+        private int quantidade = 1;
+
+        Builder cliente(String c) { this.cliente = c; return this; }
+        Builder quantidade(int q) { this.quantidade = q; return this; }
+
+        Pedido build() {
+            if (cliente == null) throw new IllegalStateException(&quot;cliente obrigatório&quot;);
+            return new Pedido(this);
+        }
+    }
+}</code></pre>
+<h3>Factory: nome em vez de construtor</h3>
+<p>Quando a criação tem nome e regras, um método estático diz mais do que <code>new</code>:</p>
+<pre><code class="language-java">record Dinheiro(long kwanzas) {
+    static Dinheiro deKwanzas(long k) { return new Dinheiro(k); }
+    static Dinheiro zero() { return new Dinheiro(0); }
+}</code></pre>
+<h3>Para guardar</h3>
+<p>Começa pelo record. Só chegas ao Builder quando os parâmetros opcionais começam a incomodar.</p>
+
+  </div>
+</article>
+
+  </main>
+
+  <footer class="foot">
+    <div class="livery" aria-hidden="true"></div>
+    <div class="wrap foot-in">
+      <div>
+        <p class="foot-name">Kambas do Java</p>
+        <p>JUG Luanda. Programadores Java de Angola, a aprender em conjunto.</p>
+      </div>
+      <ul class="foot-links">
+        <li><a href="https://www.youtube.com/@KambasdoJava" target="_blank" rel="noopener">YouTube</a></li>
+        <li><a href="https://www.linkedin.com/company/kambas-do-java/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://discord.gg/F9Q4f2gkHe" target="_blank" rel="noopener">Discord</a></li>
+        <li><a href="https://github.com/kambas-do-java" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <p class="foot-small">© 2026 Kambas do Java · Feito em Luanda</p>
+    </div>
+  </footer>
+  <script src="../../../assets/js/main.js" defer></script>
+</body>
+</html>
