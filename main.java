@@ -49,7 +49,7 @@ void main() throws Exception {
           "post_date", longDate(p.date()),
           "post_author", esc(p.author()),
           "post_minutes", String.valueOf(p.minutes()),
-          "post_tags", p.tags().stream().map(t -> "<li>" + esc(t) + "</li>").collect(Collectors.joining()))));
+          "post_tags", p.tags().stream().map(t -> "<li><a href=\"../../../all-posts.html?tag=" + URLEncoder.encode(t, StandardCharsets.UTF_8) + "\">" + esc(t) + "</a></li>").collect(Collectors.joining()))));
 
   for (var e : events) write("events/" + e.slug() + ".html",
       page("event", e.title() + " · Kambas do Java", e.description(), "../", "events", Map.of(
@@ -93,6 +93,7 @@ void main() throws Exception {
       "Artigos e tutoriais da comunidade Kambas do Java.", "", "posts", Map.of(
           "list_title", "Artigos",
           "list_lede", "Tutoriais, notas e novidades sobre Java, escritos por quem o usa em Angola.",
+          "list_tools", filterBar(posts),
           "list_body", posts.isEmpty() ? "<p class=\"empty\">Ainda não há artigos.</p>" : groupPosts(posts))));
 
   write("all-events.html", page("list", "Eventos · Kambas do Java",
@@ -258,13 +259,41 @@ String eventRow(Event e, String root) {
 
 String postRow(Post p, String root) {
   return """
-      <a class="route" href="%s">
+      <a class="route" href="%s" data-tags="%s" data-q="%s">
         <span class="route-no"><b>%s</b><i>%d</i></span>
         <span class="route-body"><strong>%s</strong><span>%s</span></span>
         <span class="route-go" aria-hidden="true">→</span>
       </a>
-      """.formatted(p.href(root), MON[p.date().getMonthValue() - 1], p.date().getYear(), esc(p.title()),
-      esc(p.description()));
+      """.formatted(p.href(root), esc(String.join("|", p.tags()).toLowerCase()),
+      esc((p.title() + " " + p.description()).toLowerCase()), MON[p.date().getMonthValue() - 1],
+      p.date().getYear(), esc(p.title()), esc(p.description()));
+}
+
+/** Controlos de filtro; ficam escondidos (hidden) e o main.js só os mostra se houver JavaScript. */
+String filterBar(List<Post> posts) {
+  if (posts.size() < 2)
+    return "";
+  var tags = new TreeMap<String, String>();
+  var count = new HashMap<String, Integer>();
+  for (var p : posts)
+    for (var tg : p.tags()) {
+      tags.putIfAbsent(tg.toLowerCase(), tg);
+      count.merge(tg.toLowerCase(), 1, Integer::sum);
+    }
+  var chips = tags.entrySet().stream()
+      .sorted(Comparator.comparing((Map.Entry<String, String> e) -> -count.get(e.getKey()))
+          .thenComparing(Map.Entry::getKey))
+      .map(e -> "<button type=\"button\" class=\"chip\" aria-pressed=\"false\" data-tag=\"%s\">%s</button>"
+          .formatted(esc(e.getKey()), esc(e.getValue())))
+      .collect(Collectors.joining());
+  return """
+      <div class="filter" hidden>
+        <label class="sr" for="q">Pesquisar artigos</label>
+        <input id="q" type="search" placeholder="Pesquisar artigos…" autocomplete="off">
+        <div class="chips" role="group" aria-label="Filtrar por tag">%s</div>
+        <p class="count" aria-live="polite"></p>
+      </div>
+      """.formatted(chips);
 }
 
 String groupPosts(List<Post> posts) {
