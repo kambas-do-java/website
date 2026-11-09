@@ -1,763 +1,492 @@
 import module java.base;
 
+// Gerador do site Kambas do Java (JUG Luanda).
+// Markdown em posts/, events/, members/  ->  templates/*.html com ${chave}  ->  site/
+// Sem dependências: só o JDK.
+
+static final Path OUT = Path.of("site");
+static final String[] MONTHS = { "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto",
+    "Setembro", "Outubro", "Novembro", "Dezembro" };
+static final String[] MON = { "jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez" };
+
+record Post(String title, String slug, String html, LocalDate date, String description, String author,
+    List<String> tags, int minutes) {
+  String href(String root) {
+    return root + "posts/%d/%02d/%s.html".formatted(date.getYear(), date.getMonthValue(), slug);
+  }
+}
+
+/** date == null significa "data por anunciar". */
+record Event(String title, String slug, String html, LocalDate date, String location, String type,
+    String description) {
+  boolean upcoming() {
+    return date == null || !date.isBefore(LocalDate.now());
+  }
+
+  String href(String root) {
+    return root + "events/" + slug + ".html";
+  }
+}
+
+record Member(String user, String name, String role, String avatar, String html, Map<String, String> links) {
+  String href(String root) {
+    return root + "members/" + user + ".html";
+  }
+}
+
 void main() throws Exception {
-  var startTime = System.currentTimeMillis();
-  Path siteDir = Paths.get("site");
+  long t0 = System.currentTimeMillis();
+  clean(OUT);
 
-  Utils.Processor.clearSiteDir(siteDir);
+  var posts = loadPosts();
+  var events = loadEvents();
+  var members = loadMembers();
 
-  var posts = Utils.Processor.processPosts(siteDir);
-  var events = Utils.Processor.processEvents(siteDir);
-  var members = Utils.Processor.processMembers(siteDir);
+  for (var p : posts) write("posts/%d/%02d/%s.html".formatted(p.date().getYear(), p.date().getMonthValue(), p.slug()),
+      page("post", p.title() + " · Kambas do Java", p.description(), "../../../", "posts", Map.of(
+          "post_title", esc(p.title()),
+          "post_html", p.html(),
+          "post_date", longDate(p.date()),
+          "post_author", esc(p.author()),
+          "post_minutes", String.valueOf(p.minutes()),
+          "post_tags", p.tags().stream().map(t -> "<li>" + esc(t) + "</li>").collect(Collectors.joining()))));
 
-  Utils.Render.render(siteDir, posts, events, members);
+  for (var e : events) write("events/" + e.slug() + ".html",
+      page("event", e.title() + " · Kambas do Java", e.description(), "../", "events", Map.of(
+          "event_title", esc(e.title()),
+          "event_html", e.html(),
+          "event_day", e.date() == null ? "—" : "%02d".formatted(e.date().getDayOfMonth()),
+          "event_mon", e.date() == null ? "em breve" : MON[e.date().getMonthValue() - 1],
+          "event_date", e.date() == null ? "Data por anunciar" : longDate(e.date()),
+          "event_location", esc(e.location()),
+          "event_type", esc(e.type()))));
 
-  println("Site gerado em: " + siteDir.toAbsolutePath());
-  println("Posts processados: " + posts.size());
-  println("Eventos processados: " + events.size());
-  println("Membros processados: " + members.size());
-  var endTime = System.currentTimeMillis();
-  println("Tempo total: " + (endTime - startTime) + " ms");
+  for (var m : members) write("members/" + m.user() + ".html",
+      page("member", m.name() + " · Kambas do Java", m.name() + ", membro da comunidade Kambas do Java",
+          "../", "members", Map.of(
+              "member_name", esc(m.name()),
+              "member_role", esc(m.role()),
+              "member_avatar", avatar(m),
+              "member_html", m.html(),
+              "member_links", m.links().entrySet().stream()
+                  .map(l -> "<a href=\"%s\" target=\"_blank\" rel=\"noopener\">%s</a>".formatted(safeUrl(l.getValue()),
+                      esc(l.getKey())))
+                  .collect(Collectors.joining()))));
+
+  // --- listagens ---
+  var upcoming = events.stream().filter(Event::upcoming).toList();
+  var past = events.stream().filter(e -> !e.upcoming()).toList();
+
+  write("index.html", page("index", "Kambas do Java · JUG Luanda",
+      "Kambas do Java, o JUG Luanda: a comunidade de programadores Java de Angola. Eventos, artigos e gente.", "",
+      "home", Map.of(
+          "board", board(upcoming.isEmpty() ? null : upcoming.get(0), posts.size(), events.size(), members.size()),
+          "home_events", upcoming.isEmpty()
+              ? "<p class=\"empty\">Ainda não há paragens marcadas. Entra no Discord para saber primeiro.</p>"
+              : upcoming.stream().limit(3).map(e -> eventRow(e, "")).collect(Collectors.joining()),
+          "home_posts", posts.isEmpty() ? "<p class=\"empty\">Os primeiros artigos estão a caminho.</p>"
+              : posts.stream().limit(4).map(p -> postRow(p, "")).collect(Collectors.joining()),
+          "home_members", members.stream().limit(12).map(m -> chip(m, "")).collect(Collectors.joining()),
+          "member_count", String.valueOf(members.size()))));
+
+  write("all-posts.html", page("list", "Artigos · Kambas do Java",
+      "Artigos e tutoriais da comunidade Kambas do Java.", "", "posts", Map.of(
+          "list_title", "Artigos",
+          "list_lede", "Tutoriais, notas e novidades sobre Java, escritos por quem o usa em Angola.",
+          "list_body", posts.isEmpty() ? "<p class=\"empty\">Ainda não há artigos.</p>" : groupPosts(posts))));
+
+  write("all-events.html", page("list", "Eventos · Kambas do Java",
+      "Meetups, workshops e encontros do JUG Luanda.", "", "events", Map.of(
+          "list_title", "Eventos",
+          "list_lede", "Meetups, workshops e encontros. Cada evento é uma paragem: aparece quem quer.",
+          "list_body", (upcoming.isEmpty() ? "<p class=\"empty\">Sem paragens marcadas por agora.</p>"
+              : "<h2 class=\"group\">Próximas paragens</h2>"
+                  + upcoming.stream().map(e -> eventRow(e, "")).collect(Collectors.joining()))
+              + (past.isEmpty() ? ""
+                  : "<h2 class=\"group\">Já passaram</h2>"
+                      + past.stream().map(e -> eventRow(e, "")).collect(Collectors.joining())))));
+
+  write("all-members.html", page("list", "Membros · Kambas do Java",
+      "Quem faz parte da comunidade Kambas do Java.", "", "members", Map.of(
+          "list_title", "Membros",
+          "list_lede", "Os kambas que já estão a bordo. Queres aparecer aqui? Abre um pull request com o teu perfil.",
+          "list_body", members.isEmpty() ? "<p class=\"empty\">Ainda não há perfis.</p>"
+              : "<div class=\"people\">" + members.stream().map(m -> chip(m, "")).collect(Collectors.joining())
+                  + "</div>")));
+
+  write("404.html", page("404", "Página não encontrada · Kambas do Java", "Esta paragem não existe.", "/", "", Map.of()));
+
+  copyAssets();
+  System.out.println("Site gerado em " + OUT.toAbsolutePath());
+  System.out.println("Artigos: %d · Eventos: %d · Membros: %d · %d ms".formatted(posts.size(), events.size(), members.size(),
+      System.currentTimeMillis() - t0));
 }
 
-class DataSet {
-  record Post(String title, String slug, String content, int year, int month, String description) {
-  }
+// ---------------------------------------------------------------- conteúdo
 
-  record Member(String name, String githubUsername, String avatarUrl, String content,
-      Map<String, String> socialLinks) {
-  }
+record Doc(Map<String, String> meta, String body, String name) {
+}
 
-  record Event(String title, String slug, String content, LocalDate date,
-      String location, String description, String eventType, boolean isUpcoming) {
+/** Linhas "@chave valor" no topo do ficheiro são metadados; o resto é o corpo. */
+Doc readDoc(Path f) throws IOException {
+  var meta = new LinkedHashMap<String, String>();
+  var body = new StringBuilder();
+  boolean head = true;
+  for (String line : Files.readString(f).split("\r?\n", -1)) {
+    if (head && line.startsWith("@")) {
+      String[] kv = line.substring(1).split("\\s+", 2);
+      meta.put(kv[0].toLowerCase(), kv.length > 1 ? kv[1].trim() : "");
+    } else if (head && line.isBlank()) {
+      continue;
+    } else {
+      head = false;
+      body.append(line).append('\n');
+    }
+  }
+  String n = f.getFileName().toString();
+  return new Doc(meta, body.toString().strip(), n.substring(0, n.length() - 3));
+}
+
+List<Path> mdFiles(String dir) throws IOException {
+  if (!Files.isDirectory(Path.of(dir)))
+    return List.of();
+  try (var s = Files.walk(Path.of(dir))) {
+    return s.filter(p -> p.toString().endsWith(".md") && !p.getFileName().toString().startsWith("_")).sorted()
+        .toList();
   }
 }
 
-class Utils {
-  static class MarkdownProcessor {
+String humanize(String n) {
+  String s = n.replaceAll("[-_]+", " ").strip();
+  return s.isEmpty() ? n : Character.toUpperCase(s.charAt(0)) + s.substring(1);
+}
 
-    private enum ListType { NONE, UNORDERED, ORDERED }
+String slug(String s) {
+  return Normalizer.normalize(s.toLowerCase(), Normalizer.Form.NFD).replaceAll("\\p{M}", "")
+      .replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
+}
 
-    public static String markdownToHtml(String md) {
-      String[] lines = md.split("\r?\n");
-      StringBuilder sb = new StringBuilder();
-      ListType listType = ListType.NONE;
-      boolean inCodeBlock = false;
-      String codeLang = "";
-      StringBuilder codeBuffer = new StringBuilder();
+List<Post> loadPosts() throws IOException {
+  var list = new ArrayList<Post>();
+  for (Path f : mdFiles("posts")) {
+    var d = readDoc(f);
+    int year = Integer.parseInt(f.getParent().getParent().getFileName().toString());
+    int month = Integer.parseInt(f.getParent().getFileName().toString());
+    LocalDate date = LocalDate.of(year, month, 1);
+    if (d.meta().containsKey("date"))
+      date = LocalDate.parse(d.meta().get("date"));
+    String html = md(d.body());
+    String desc = d.meta().getOrDefault("description", excerpt(d.body()));
+    var tags = Arrays.stream(d.meta().getOrDefault("tags", "").split(",")).map(String::trim)
+        .filter(t -> !t.isEmpty()).toList();
+    int words = d.body().split("\\s+").length;
+    list.add(new Post(d.meta().getOrDefault("title", humanize(d.name())), slug(d.name()), html, date, desc,
+        d.meta().getOrDefault("author", "Kambas do Java"), tags, Math.max(1, (int) Math.ceil(words / 200.0))));
+  }
+  list.sort(Comparator.comparing(Post::date).reversed());
+  return list;
+}
 
-      for (String line : lines) {
-        if (line.startsWith("@")) {
-          // ignora metadados
-          continue;
-        }
-
-        if (line.startsWith("```")) {
-          if (!inCodeBlock) {
-            inCodeBlock = true;
-            codeLang = line.substring(3).trim();
-            codeBuffer.setLength(0);
-          } else {
-            inCodeBlock = false;
-            String langClass = codeLang.isBlank() ? "" : " class=\"language-" + escapeHtml(codeLang) + "\"";
-            sb.append("<pre><code").append(langClass).append(">")
-              .append(escapeHtml(codeBuffer.toString().stripTrailing()))
-              .append("</code></pre>\n");
-          }
-          continue;
-        }
-        if (inCodeBlock) {
-          codeBuffer.append(line).append("\n");
-          continue;
-        }
-
-        Matcher orderedMatcher = ORDERED_ITEM.matcher(line);
-
-        if (line.startsWith("### ")) {
-          listType = closeList(sb, listType);
-          sb.append("<h3>").append(inlineToHtml(line.substring(4))).append("</h3>\n");
-        } else if (line.startsWith("## ")) {
-          listType = closeList(sb, listType);
-          sb.append("<h2>").append(inlineToHtml(line.substring(3))).append("</h2>\n");
-        } else if (line.startsWith("# ")) {
-          listType = closeList(sb, listType);
-          sb.append("<h1>").append(inlineToHtml(line.substring(2))).append("</h1>\n");
-        } else if (line.startsWith("- ") || line.startsWith("* ")) {
-          if (listType != ListType.UNORDERED) {
-            listType = closeList(sb, listType);
-            sb.append("<ul>\n");
-            listType = ListType.UNORDERED;
-          }
-          sb.append("<li>").append(inlineToHtml(line.substring(2))).append("</li>\n");
-        } else if (orderedMatcher.matches()) {
-          if (listType != ListType.ORDERED) {
-            listType = closeList(sb, listType);
-            sb.append("<ol>\n");
-            listType = ListType.ORDERED;
-          }
-          sb.append("<li>").append(inlineToHtml(orderedMatcher.group(1))).append("</li>\n");
-        } else if (line.startsWith("> ")) {
-          listType = closeList(sb, listType);
-          sb.append("<blockquote>").append(inlineToHtml(line.substring(2))).append("</blockquote>\n");
-        } else {
-          listType = closeList(sb, listType);
-          if (line.isBlank()) {
-            // ignora
-          } else {
-            sb.append("<p>").append(inlineToHtml(line)).append("</p>\n");
-          }
-        }
-      }
-      closeList(sb, listType);
-      return sb.toString();
+List<Event> loadEvents() throws IOException {
+  var list = new ArrayList<Event>();
+  for (Path f : mdFiles("events")) {
+    var d = readDoc(f);
+    LocalDate date = null;
+    try {
+      if (d.meta().containsKey("date"))
+        date = LocalDate.parse(d.meta().get("date"));
+    } catch (Exception ex) {
+      System.err.println("Aviso: data inválida em " + f + " (usa AAAA-MM-DD); fica 'por anunciar'.");
     }
+    list.add(new Event(d.meta().getOrDefault("title", humanize(d.name())), slug(d.name()), md(d.body()), date,
+        d.meta().getOrDefault("location", "Local por anunciar"), d.meta().getOrDefault("type", "meetup"),
+        d.meta().getOrDefault("description", excerpt(d.body()))));
+  }
+  var byDate = Comparator.comparing(Event::date, Comparator.nullsLast(Comparator.naturalOrder()));
+  list.sort(Comparator.comparing((Event e) -> !e.upcoming())
+      .thenComparing((a, b) -> a.upcoming() ? byDate.compare(a, b) : byDate.reversed().compare(a, b)));
+  return list;
+}
 
-    private static ListType closeList(StringBuilder sb, ListType listType) {
-      if (listType == ListType.UNORDERED) {
-        sb.append("</ul>\n");
-      } else if (listType == ListType.ORDERED) {
-        sb.append("</ol>\n");
-      }
-      return ListType.NONE;
+List<Member> loadMembers() throws IOException {
+  var list = new ArrayList<Member>();
+  for (Path f : mdFiles("members")) {
+    var d = readDoc(f);
+    String user = d.name();
+    var links = new LinkedHashMap<String, String>();
+    links.put("GitHub", "https://github.com/" + user);
+    for (String part : d.meta().getOrDefault("socials", "").split(",")) {
+      String[] kv = part.split(":", 2);
+      if (kv.length == 2 && !kv[0].isBlank())
+        links.put(kv[0].trim(), kv[1].trim());
     }
+    list.add(new Member(user, d.meta().getOrDefault("name", user), d.meta().getOrDefault("role", "Membro"),
+        d.meta().getOrDefault("avatar-url", "https://github.com/" + user + ".png"), md(d.body()), links));
+  }
+  list.sort(Comparator.comparing(m -> m.name().toLowerCase()));
+  return list;
+}
 
-    private static final Pattern ORDERED_ITEM = Pattern.compile("^\\d+\\.\\s+(.*)$");
-    private static final Pattern INLINE_CODE = Pattern.compile("`([^`]+)`");
-    private static final Pattern BOLD = Pattern.compile("\\*\\*([^*]+)\\*\\*");
-    private static final Pattern ITALIC = Pattern.compile("\\*([^*]+)\\*");
-    private static final Pattern LINK = Pattern.compile("\\[([^\\]]+)\\]\\(([^)]+)\\)");
-
-    /** Escapes HTML first, then re-applies Markdown inline spans on the escaped text. */
-    private static String inlineToHtml(String line) {
-      String escaped = escapeHtml(line);
-      escaped = LINK.matcher(escaped).replaceAll(m ->
-          "<a href=\"" + m.group(2) + "\">" + m.group(1) + "</a>");
-      escaped = BOLD.matcher(escaped).replaceAll("<strong>$1</strong>");
-      escaped = ITALIC.matcher(escaped).replaceAll("<em>$1</em>");
-      escaped = INLINE_CODE.matcher(escaped).replaceAll("<code>$1</code>");
-      return escaped;
-    }
-
-    public static String extractDescription(String md) {
-      // Extrai a primeira linha não vazia como descrição
-      String[] lines = md.split("\r?\n");
-      for (String line : lines) {
-        if (!line.trim().isEmpty() && !line.trim().startsWith("#")) {
-          return line.trim().replaceAll("[#*\\-_>]", "").trim();
-        }
-      }
-      return "Artigo da comunidade Kambas do Java";
-    }
-
-    public static Map<String, String> extractEventMetadata(String md) {
-      Map<String, String> metadata = new HashMap<>();
-      String[] lines = md.split("\r?\n");
-
-      for (String line : lines) {
-        if (line.startsWith("<!--") && line.contains(":")) {
-          String cleanLine = line.replace("<!--", "").replace("-->", "").trim();
-          String[] parts = cleanLine.split(":", 2);
-          if (parts.length == 2) {
-            String key = parts[0].trim().toLowerCase();
-            String value = parts[1].trim();
-            metadata.put(key, value);
-          }
-        } else if (line.startsWith("#")) {
-          break; // Para no primeiro heading
-        }
-      }
-
-      return metadata;
-    }
-
-    public static DataSet.Event parseEventFromMarkdown(String md, String fileName) {
-      Map<String, String> metadata = extractEventMetadata(md);
-
-      String title = fileName.replace(".md", "");
-      String slug = title.toLowerCase()
-          .replace(" ", "-")
-          .replaceAll("[^a-z0-9-]", "");
-
-      // Extrai conteúdo (remove metadata)
-      String content = md.replaceAll("(?s)<!--.*?-->", "").trim();
-      content = Utils.MarkdownProcessor.markdownToHtml(content);
-
-      // Parse metadata
-      LocalDate date = LocalDate.now();
-      if (metadata.containsKey("date")) {
-        try {
-          date = LocalDate.parse(metadata.get("date"));
-        } catch (Exception e) {
-          // Usa data atual se parsing falhar
-        }
-      }
-
-      String location = metadata.getOrDefault("location", "Online");
-      String description = metadata.getOrDefault("description", extractDescription(md));
-      String EventType = metadata.getOrDefault("type", "meetup");
-
-      boolean isUpcoming = date.isAfter(LocalDate.now().minusDays(1));
-
-      return new DataSet.Event(title, slug, content, date, location, description, EventType, isUpcoming);
-    }
-
-    public static DataSet.Member parseMemberFromMarkdown(String md, String githubUsername) {
-      String[] lines = md.split("\r?\n");
-      var metadata = Utils.Processor.readMetadata(md);
-      String name = metadata.getOrDefault("name", githubUsername);
-      Map<String, String> socialLinks = new HashMap<>();
-      StringBuilder content = new StringBuilder();
-
-      for (String line : lines) {
-        if (!line.trim().isEmpty() && !line.trim().startsWith("@")) {
-          content.append(line).append("\n");
-        }
-      }
-
-      var socials = metadata.getOrDefault("socials", "").split(",");
-
-      Arrays.stream(socials).forEach(line -> {
-        String[] parts = line.split(":", 2);
-        if (parts.length == 2) {
-          socialLinks.put(parts[0].trim(), parts[1].trim());
-        }
-      });
-
-      String avatarUrl = metadata.getOrDefault("avatar-url", "https://github.com/" + githubUsername + ".png");
-
-      return new DataSet.Member(name, githubUsername, avatarUrl,
-          Utils.MarkdownProcessor.markdownToHtml(content.toString()), socialLinks);
-    }
-
-    public static String escapeHtml(String s) {
-      return s.replace("&", "&amp;")
-          .replace("<", "&lt;")
-          .replace(">", "&gt;")
-          .replace("\"", "&quot;")
-          .replace("'", "&#39;");
+String excerpt(String body) {
+  for (String p : body.split("\n\\s*\n")) {
+    String t = p.strip();
+    if (!t.isEmpty() && !t.startsWith("#") && !t.startsWith("```")) {
+      t = t.replaceAll("[`*_>\\[\\]]|\\(.*?\\)", "").replaceAll("\\s+", " ").strip();
+      return t.length() > 160 ? t.substring(0, 157) + "…" : t;
     }
   }
+  return "Conteúdo da comunidade Kambas do Java.";
+}
 
-  static class TemplateEngine {
+// ---------------------------------------------------------------- fragmentos
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter MONTH_FORMATTER = DateTimeFormatter.ofPattern("MMMM",
-        new Locale.Builder().setLanguage("pt").build());
-    private static final DateTimeFormatter DAY_FORMATTER = DateTimeFormatter.ofPattern("dd");
+String longDate(LocalDate d) {
+  return "%d de %s de %d".formatted(d.getDayOfMonth(), MONTHS[d.getMonthValue() - 1].toLowerCase(), d.getYear());
+}
 
-    public static String renderIndex(List<DataSet.Post> posts, List<DataSet.Event> events, List<DataSet.Member> members)
-        throws Exception {
-      String template = Files.readString(Paths.get("templates/base.html"));
-      String content = Files.readString(Paths.get("templates/index.html"));
+String eventRow(Event e, String root) {
+  String day = e.date() == null ? "—" : "%02d".formatted(e.date().getDayOfMonth());
+  String mon = e.date() == null ? "breve" : MON[e.date().getMonthValue() - 1];
+  return """
+      <a class="route" href="%s">
+        <span class="route-no"><b>%s</b><i>%s</i></span>
+        <span class="route-body"><strong>%s</strong><span>%s · %s</span></span>
+        <span class="route-go" aria-hidden="true">→</span>
+      </a>
+      """.formatted(e.href(root), day, mon, esc(e.title()), esc(e.type()), esc(e.location()));
+}
 
-      // Prepara posts recentes
-      List<DataSet.Post> recentPosts = posts.stream().limit(3).collect(Collectors.toList());
-      StringBuilder postsHtml = new StringBuilder();
-      for (DataSet.Post post : recentPosts) {
-        postsHtml.append("<div class='post-preview'>")
-            .append("<h3><a href='posts/").append(post.year()).append("/")
-            .append(String.format("%02d", post.month())).append("/")
-            .append(post.slug()).append(".html'>").append(post.title()).append("</a></h3>")
-            .append("<p class='post-meta'>").append(String.format("%02d", post.month()))
-            .append("/").append(post.year()).append("</p>")
-            .append("<p>").append(post.description()).append("</p>")
-            .append("</div>");
-      }
+String postRow(Post p, String root) {
+  return """
+      <a class="route" href="%s">
+        <span class="route-no"><b>%s</b><i>%d</i></span>
+        <span class="route-body"><strong>%s</strong><span>%s</span></span>
+        <span class="route-go" aria-hidden="true">→</span>
+      </a>
+      """.formatted(p.href(root), MON[p.date().getMonthValue() - 1], p.date().getYear(), esc(p.title()),
+      esc(p.description()));
+}
 
-      // Prepara Eventos próximos
-      List<DataSet.Event> upcomingEvents = events.stream()
-          .filter(e -> e.isUpcoming())
-          .limit(2)
-          .collect(Collectors.toList());
-
-      StringBuilder eventsHtml = new StringBuilder();
-      if (upcomingEvents.isEmpty()) {
-        eventsHtml.append("<div class='empty-state'>")
-            .append("<h3>Sem eventos agendados</h3>")
-            .append("<p>Ainda não há próximos eventos marcados. Fica atento aos nossos canais.</p>")
-            .append("</div>");
-      }
-      for (var event : upcomingEvents) {
-        eventsHtml.append("<div class='event'>")
-            .append("<div class='event-date'>")
-            .append("<span class='event-day'>").append(event.date().format(DAY_FORMATTER)).append("</span>")
-            .append("<span class='event-month'>").append(event.date().format(MONTH_FORMATTER)).append("</span>")
-            .append("</div>")
-            .append("<div class='event-details'>")
-            .append("<h3><a href='events/").append(event.slug()).append(".html'>").append(event.title())
-            .append("</a></h3>")
-            .append("<p class='event-location'>").append(event.location()).append("</p>")
-            .append("<p>").append(event.description()).append("</p>")
-            .append("<a href='events/").append(event.slug()).append(".html' class='event-link'>Mais informações</a>")
-            .append("</div>")
-            .append("</div>");
-      }
-
-      // Prepara membros
-      StringBuilder membersHtml = new StringBuilder();
-      for (DataSet.Member member : members) {
-        membersHtml.append("<div class='member-card'>")
-            .append("<a href='members/").append(member.githubUsername()).append(".html'>")
-            .append("<img src='https://github.com/" + member.githubUsername() + ".png' alt='" + member.name() + "'>")
-            .append("<h3>").append(member.name()).append("</h3>")
-            .append("</a>")
-            .append("</div>");
-      }
-
-      // Substitui placeholders
-      content = content.replace("${recent_posts}", postsHtml.toString())
-          .replace("${upcoming_events}", eventsHtml.toString())
-          .replace("${members}", membersHtml.toString())
-          .replace("${event_totals}", events.size() + "")
-          .replace("${post_totals}", posts.size() + "")
-          .replace("${member_totals}", members.size() + "");
-
-      return applyBaseTemplate(template, content, "Kambas do Java - Comunidade Java de Luanda",
-          "Comunidade de desenvolvedores Java de Luanda, Angola. Eventos, tutoriais e notícias sobre Java e tecnologia.",
-          true);
+String groupPosts(List<Post> posts) {
+  var sb = new StringBuilder();
+  Integer year = null;
+  for (var p : posts) {
+    if (year == null || year != p.date().getYear()) {
+      year = p.date().getYear();
+      sb.append("<h2 class=\"group\">").append(year).append("</h2>");
     }
-
-    static String renderPost(DataSet.Post post) throws Exception {
-      String template = Files.readString(Paths.get("templates/base.html"));
-      String content = Files.readString(Paths.get("templates/post.html"));
-
-      // Formata a data do post
-      String postDate = String.format("%02d/%d", post.month(), post.year());
-
-      // Substitui placeholders
-      content = content.replace("${post_title}", post.title())
-        .replace("${post_content}", post.content())
-        .replace("${post_date}", postDate);
-
-      // Calcula o caminho relativo para assets
-      String basePath = "../../../";
-
-      // Aplica o template base
-      return applyBaseTemplate(template, content, post.title() + " - Kambas do Java",
-          post.description(), false, basePath);
-    }
-
-    public static String renderAllPosts(List<DataSet.Post> posts) throws Exception {
-      String template = Files.readString(Paths.get("templates/base.html"));
-      String content = Files.readString(Paths.get("templates/all-posts.html"));
-
-      // Agrupa posts por ano e mês
-      Map<Integer, Map<Integer, List<DataSet.Post>>> postsByYearMonth = posts.stream()
-          .collect(Collectors.groupingBy(p -> p.year(),
-              TreeMap::new,
-              Collectors.groupingBy(p -> p.month(), TreeMap::new, Collectors.toList())));
-
-      StringBuilder postsHtml = new StringBuilder();
-
-      for (Integer year : postsByYearMonth.keySet().stream().sorted(Comparator.reverseOrder())
-          .collect(Collectors.toList())) {
-        postsHtml.append("<div class='year-section'>")
-            .append("<h2>").append(year).append("</h2>");
-
-        Map<Integer, List<DataSet.Post>> postsByMonth = postsByYearMonth.get(year);
-        for (Integer month : postsByMonth.keySet().stream().sorted(Comparator.reverseOrder())
-            .collect(Collectors.toList())) {
-          postsHtml.append("<div class='month-section'>")
-              .append("<h3>").append(getMonthName(month)).append("</h3>")
-              .append("<div class='posts-list'>");
-
-          for (DataSet.Post post : postsByMonth.get(month)) {
-            postsHtml.append("<div class='post-item'>")
-                .append("<div class='post-date'>")
-                .append("<span class='post-day'>").append(String.format("%02d", post.month())).append("</span>")
-                .append("<span class='post-month'>").append(getMonthAbbr(month)).append("</span>")
-                .append("</div>")
-                .append("<div class='post-content'>")
-                .append("<h4><a href='posts/").append(year).append("/")
-                .append(String.format("%02d", month)).append("/")
-                .append(post.slug()).append(".html'>").append(post.title()).append("</a></h4>")
-                .append("<p class='post-excerpt'>").append(post.description()).append("</p>")
-                .append("</div>")
-                .append("</div>");
-          }
-
-          postsHtml.append("</div></div>");
-        }
-
-        postsHtml.append("</div>");
-      }
-
-      // Substitui placeholders
-      content = content.replace("${all_posts}", postsHtml.toString())
-          .replace("${total_posts}", String.valueOf(posts.size()))
-          .replace("${total_years}", String.valueOf(postsByYearMonth.keySet().size()));
-
-      // Aplica o template base
-      return applyBaseTemplate(template, content, "Todos os Posts - Kambas do Java",
-          "Lista completa de artigos e tutoriais da comunidade Kambas do Java", true);
-    }
-
-    private static String getMonthName(int month) {
-      String[] months = { "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-          "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" };
-      if (month >= 1 && month <= 12) {
-        return months[month - 1];
-      }
-      return "Mês inválido";
-    }
-
-    private static String getMonthAbbr(int month) {
-      String[] months = { "JAN", "FEV", "MAR", "ABR", "MAI", "JUN",
-          "JUL", "AGO", "SET", "OUT", "NOV", "DEZ" };
-      return months[month - 1];
-    }
-
-    static String renderEvent(DataSet.Event event) throws Exception {
-      String template = Files.readString(Paths.get("templates/base.html"));
-      String content = Files.readString(Paths.get("templates/event.html"));
-
-      // Substitui placeholders
-      content = content.replace("${event_title}", event.title())
-          .replace("${event_content}", event.content())
-          .replace("${event_date}", event.date.format(DATE_FORMATTER))
-          .replace("${event_location}", event.location())
-          .replace("${event_type}", event.eventType());
-
-      String basePath = "../";
-      return applyBaseTemplate(template, content, event.title() + " - Kambas do Java",
-          event.description(), false, basePath);
-    }
-
-    public static String renderAllEvents(List<DataSet.Event> events) throws Exception {
-      String template = Files.readString(Paths.get("templates/base.html"));
-      String content = Files.readString(Paths.get("templates/all-events.html"));
-
-      // Separa Eventos por status
-      List<DataSet.Event> upcomingEvents = events.stream()
-          .filter(e -> e.isUpcoming())
-          .collect(Collectors.toList());
-
-      List<DataSet.Event> pastEvents = events.stream()
-          .filter(e -> !e.isUpcoming())
-          .collect(Collectors.toList());
-
-      StringBuilder eventsHtml = new StringBuilder();
-
-      // Eventos próximos
-      if (!upcomingEvents.isEmpty()) {
-        eventsHtml.append("<div class='events-section'>")
-            .append("<h2>Próximos Eventos</h2>")
-            .append("<div class='events-list'>");
-
-        for (DataSet.Event event : upcomingEvents) {
-          eventsHtml.append(renderEventItem(event));
-        }
-
-        eventsHtml.append("</div></div>");
-      }
-
-      // Eventos passados
-      if (!pastEvents.isEmpty()) {
-        eventsHtml.append("<div class='events-section'>")
-            .append("<h2>Eventos Passados</h2>")
-            .append("<div class='events-list'>");
-
-        for (DataSet.Event event : pastEvents) {
-          eventsHtml.append(renderEventItem(event));
-        }
-
-        eventsHtml.append("</div></div>");
-      }
-
-      content = content.replace("${all_events}", eventsHtml.toString())
-          .replace("${total_events}", String.valueOf(events.size()))
-          .replace("${upcoming_count}", String.valueOf(upcomingEvents.size()))
-          .replace("${past_count}", String.valueOf(pastEvents.size()));
-
-      return applyBaseTemplate(template, content, "Todos os Eventos - Kambas do Java",
-          "Calendário completo de eventos, meetups e workshops da comunidade Kambas do Java", true);
-    }
-
-    static String renderMember(DataSet.Member member) throws Exception {
-      String template = Files.readString(Paths.get("templates/base.html"));
-      String content = Files.readString(Paths.get("templates/member.html"));
-
-      content = content.replace("${member_name}", member.name())
-          .replace("${member_avatar_url}", member.avatarUrl())
-          .replace("${member_content}", member.content());
-
-      StringBuilder socialLinksHtml = new StringBuilder();
-      if (!member.socialLinks().isEmpty()) {
-        socialLinksHtml.append("<div class='member-social-links'>");
-        for (Map.Entry<String, String> entry : member.socialLinks().entrySet()) {
-          socialLinksHtml.append("<a href='" + entry.getValue() + "' target='_blank'>" + entry.getKey() + "</a>");
-        }
-        socialLinksHtml.append("</div>");
-      }
-      content = content.replace("${member_social_links}", socialLinksHtml.toString());
-
-      String basePath = "../";
-      return applyBaseTemplate(template, content, member.name() + " - Kambas do Java",
-          member.githubUsername(), false, basePath);
-    }
-
-    public static String renderAllMembers(List<DataSet.Member> members) throws Exception {
-      String template = Files.readString(Paths.get("templates/base.html"));
-      String content = Files.readString(Paths.get("templates/all-members.html"));
-
-      StringBuilder membersHtml = new StringBuilder();
-      for (DataSet.Member member : members) {
-        membersHtml.append("<div class='member-card'>")
-            .append("<a href='members/").append(member.githubUsername).append(".html'>")
-            .append("<img src='").append(member.avatarUrl).append("' alt='").append(member.name).append("'>")
-            .append("<h3>").append(member.name).append("</h3>")
-            .append("</a>")
-            .append("</div>");
-      }
-
-      content = content.replace("${all_members}", membersHtml.toString());
-
-      return applyBaseTemplate(template, content, "Membros - Kambas do Java",
-          "Conheça os membros da comunidade Kambas do Java", true);
-    }
-
-    private static String renderEventItem(DataSet.Event event) {
-      return "<div class='event-item'>" +
-          "<div class='event-date'>" +
-          "<span class='event-day'>" + event.date().format(DAY_FORMATTER) + "</span>" +
-          "<span class='event-month'>" + event.date().format(MONTH_FORMATTER) + "</span>" +
-          "<span class='event-year'>" + event.date().getYear() + "</span>" +
-          "</div>" +
-          "<div class='event-content'>" +
-          "<h3><a href='events/" + event.slug() + ".html'>" + event.title() + "</a></h3>" +
-          "<p class='event-meta'>" +
-          "<span class='event-location'>📍 " + event.location() + "</span>" +
-          "<span class='event-type'>" + getEventTypeIcon(event.eventType()) + " " + event.eventType() + "</span>" +
-          "</p>" +
-          "<p class='event-description'>" + event.description() + "</p>" +
-          "<a href='events/" + event.slug() + ".html' class='btn btn-outline'>Ver Detalhes</a>" +
-          "</div>" +
-          "</div>";
-    }
-
-    private static String getEventTypeIcon(String eventType) {
-      return switch (eventType.toLowerCase()) {
-        case "workshop" -> "🔧";
-        case "meetup" -> "👥";
-        case "conference" -> "🎤";
-        case "hackathon" -> "💻";
-        default -> "📅";
-      };
-    }
-
-    private static String applyBaseTemplate(String template, String content, String title,
-        String description, boolean isIndex) {
-      return applyBaseTemplate(template, content, title, description, isIndex, "");
-    }
-
-    private static String applyBaseTemplate(String template, String content, String title,
-        String description, boolean isIndex, String basePath) {
-      String currentYear = String.valueOf(LocalDate.now().getYear());
-
-      return template.replace("${page_title}", title)
-          .replace("${page_description}", description)
-          .replace("${page_content}", content)
-          .replace("${current_year}", currentYear)
-          .replace("${base_path}", basePath);
-    }
+    sb.append(postRow(p, ""));
   }
+  return sb.toString();
+}
 
-  static class Processor {
+String avatar(Member m) {
+  return "<span class=\"avatar\" data-i=\"%s\"><img src=\"%s\" alt=\"\" loading=\"lazy\" onerror=\"this.remove()\"></span>"
+      .formatted(esc(m.name().substring(0, 1).toUpperCase()), safeUrl(m.avatar()));
+}
 
-    static List<DataSet.Post> processPosts(Path siteDir) throws IOException {
-      Path postsDir = Paths.get("posts");
+String chip(Member m, String root) {
+  return "<a class=\"person\" href=\"%s\">%s<span>%s</span></a>".formatted(m.href(root), avatar(m), esc(m.name()));
+}
 
-      List<DataSet.Post> posts = new ArrayList<>();
+/** O painel de destino da página inicial: só mostra o que é verdade no conteúdo. */
+String board(Event next, int posts, int events, int members) {
+  String line1 = next == null ? "SEM PARAGEM MARCADA" : esc(next.title()).toUpperCase();
+  String line2 = next == null ? "ENTRA NO DISCORD PARA SABER PRIMEIRO"
+      : (next.date() == null ? "DATA POR ANUNCIAR"
+          : "%02d %s %d".formatted(next.date().getDayOfMonth(), MON[next.date().getMonthValue() - 1].toUpperCase(),
+              next.date().getYear()))
+          + " · " + esc(next.location()).toUpperCase();
+  return """
+      <div class="board" role="group" aria-label="Próxima paragem">
+        <p class="board-label">Próxima paragem</p>
+        <p class="board-line board-main">%s</p>
+        <p class="board-line">%s</p>
+        <p class="board-foot">%s · %s · %s</p>
+      </div>
+      """.formatted(line1, line2, plural(members, "membro", "membros"), plural(events, "evento", "eventos"),
+      plural(posts, "artigo", "artigos"));
+}
 
-      // Processa posts
-      if (Files.exists(postsDir)) {
-        Files.walk(postsDir)
-            .filter(p -> p.toString().endsWith(".md")) // Process only .md files
-            .filter(p -> !p.toFile().getName().startsWith("_")) // Ignore files starting with _
-            .forEach(mdFile -> {
-              try {
-                String md = Files.readString(mdFile);
-                var metadata = Utils.Processor.readMetadata(md);  
-                String description = metadata.getOrDefault("description", "");
-                String html = Utils.MarkdownProcessor.markdownToHtml(md);
-                String fileName = mdFile.getFileName().toString().replace(".md", "");
-                int year = Integer.parseInt(mdFile.getParent().getParent().getFileName().toString());
-                int month = Integer.parseInt(mdFile.getParent().getFileName().toString());
-                String slug = fileName.toLowerCase()
-                    .replace(" ", "-")
-                    .replaceAll("[^a-z0-9-]", "");
-                var title = metadata.getOrDefault("title", fileName);
+String plural(int n, String um, String varios) {
+  return n + " " + (n == 1 ? um : varios);
+}
 
+// ---------------------------------------------------------------- templates
 
-                DataSet.Post post = new DataSet.Post(title, slug, html, year, month, description);
-                posts.add(post);
+String read(String name) throws IOException {
+  return Files.readString(Path.of("templates", name + ".html"));
+}
 
-                // Gera HTML do post
-                String postHtml = Utils.TemplateEngine.renderPost(post);
-                Path outDir = siteDir.resolve("posts/" + year + "/" + String.format("%02d", month));
-                Files.createDirectories(outDir);
-                Files.writeString(outDir.resolve(post.slug() + ".html"), postHtml);
-              } catch (Exception e) {
-                throw new RuntimeException(e);
-              }
-            });
-      }
+/** Uma só passagem: valores inseridos nunca são re-interpretados como ${chave}. */
+String fill(String tpl, Map<String, String> vars) {
+  return Pattern.compile("\\$\\{(\\w+)}").matcher(tpl)
+      .replaceAll(m -> Matcher.quoteReplacement(vars.getOrDefault(m.group(1), "")));
+}
 
-      // Ordena posts do mais recente para o mais antigo
-      posts.sort((p1, p2) -> {
-        if (p1.year() != p2.year())
-          return Integer.compare(p2.year(), p1.year());
-        return Integer.compare(p2.month(), p1.month());
-      });
+String page(String view, String title, String desc, String root, String nav, Map<String, String> vars)
+    throws IOException {
+  var v = new HashMap<>(vars);
+  v.put("root", root);
+  String content = fill(read(switch (view) {
+    case "list" -> "all-posts";
+    default -> view;
+  }), v);
+  var b = new HashMap<String, String>();
+  b.put("title", esc(title));
+  b.put("description", esc(desc));
+  b.put("root", root);
+  b.put("content", content);
+  b.put("year", String.valueOf(LocalDate.now().getYear()));
+  for (String n : List.of("home", "posts", "events", "members"))
+    b.put("nav_" + n, n.equals(nav) ? " aria-current=\"page\"" : "");
+  return fill(read("base"), b);
+}
 
-      return posts;
+// ---------------------------------------------------------------- markdown
 
+static final Pattern LI = Pattern.compile("^(\\s*)([-*]|\\d+\\.)\\s+(.*)$");
+static final Pattern CODE = Pattern.compile("`([^`]+)`");
+static final Pattern IMG = Pattern.compile("!\\[([^\\]]*)]\\(([^)\\s]+)\\)");
+static final Pattern LINK = Pattern.compile("\\[([^\\]]+)]\\(([^)\\s]+)\\)");
+static final Pattern BOLD = Pattern.compile("\\*\\*(.+?)\\*\\*");
+static final Pattern ITAL = Pattern.compile("(?<![\\w*])\\*([^*\\s][^*]*?)\\*(?![\\w*])");
+
+String md(String src) {
+  var out = new StringBuilder();
+  var para = new StringBuilder();
+  var lists = new ArrayDeque<String>();
+  var code = new StringBuilder();
+  boolean fence = false;
+  String lang = "";
+
+  for (String line : src.split("\r?\n", -1)) {
+    if (fence) {
+      if (line.stripTrailing().equals("```")) {
+        out.append("<pre><code").append(lang.isBlank() ? "" : " class=\"language-" + esc(lang) + "\"").append(">")
+            .append(esc(code.toString().stripTrailing())).append("</code></pre>\n");
+        fence = false;
+      } else
+        code.append(line).append('\n');
+      continue;
     }
-
-    static List<DataSet.Event> processEvents(Path siteDir) throws IOException {
-      Path eventsDir = Paths.get("events");
-
-      List<DataSet.Event> events = new ArrayList<>();
-
-      // Processa Eventos
-      if (Files.exists(eventsDir)) {
-        Files.walk(eventsDir)
-            .filter(p -> p.toString().endsWith(".md")) // Process only .md files
-            .filter(p -> !p.toFile().getName().startsWith("_")) // Ignore files starting with _
-            .forEach(mdFile -> {
-              try {
-                String md = Files.readString(mdFile);
-                String fileName = mdFile.getFileName().toString();
-                DataSet.Event event = Utils.MarkdownProcessor.parseEventFromMarkdown(md, fileName);
-                events.add(event);
-
-                // Gera HTML do Evento
-                String eventHtml = Utils.TemplateEngine.renderEvent(event);
-                Path outDir = siteDir.resolve("events");
-                Files.createDirectories(outDir);
-                Files.writeString(outDir.resolve(event.slug + ".html"), eventHtml);
-              } catch (Exception e) {
-                throw new RuntimeException(e);
-              }
-            });
-      }
-
-      // Ordena Eventos: próximos primeiro, depois passados
-      events.sort((e1, e2) -> {
-        if (e1.isUpcoming != e2.isUpcoming) {
-          return Boolean.compare(e2.isUpcoming, e1.isUpcoming); // Upcoming first
-        }
-        return e2.date.compareTo(e1.date); // Most recent first
-      });
-
-      return events;
+    if (line.startsWith("```")) {
+      flush(out, para);
+      closeLists(out, lists);
+      fence = true;
+      lang = line.substring(3).trim();
+      code.setLength(0);
+      continue;
     }
-
-    static List<DataSet.Member> processMembers(Path siteDir) throws IOException {
-      Path membersDir = Paths.get("members");
-
-      List<DataSet.Member> members = new ArrayList<>();
-
-      // Processa membros
-      if (Files.exists(membersDir)) {
-        Files.walk(membersDir)
-            .filter(p -> p.toString().endsWith(".md")) // Process only .md files
-            .filter(p -> !p.toFile().getName().startsWith("_")) // Ignore files starting with _
-            .forEach(mdFile -> {
-              try {
-                String md = Files.readString(mdFile);
-                String githubUsername = mdFile.getFileName().toString().replace(".md", "");
-                DataSet.Member member = Utils.MarkdownProcessor.parseMemberFromMarkdown(md, githubUsername);
-                members.add(member);
-
-                // Gera HTML do membro
-                String memberHtml = Utils.TemplateEngine.renderMember(member);
-                Path outDir = siteDir.resolve("members");
-                Files.createDirectories(outDir);
-                Files.writeString(outDir.resolve(member.githubUsername() + ".html"), memberHtml);
-              } catch (Exception e) {
-                throw new RuntimeException(e);
-              }
-            });
-      }
-
-      return members;
+    if (line.isBlank()) {
+      flush(out, para);
+      continue;
     }
-
-    static void clearSiteDir(Path siteDir) throws Exception {
-      if (Files.exists(siteDir)) {
-        Files.walk(siteDir)
-            .sorted(Comparator.reverseOrder())
-            .map(Path::toFile)
-            .forEach(File::delete);
+    Matcher li = LI.matcher(line);
+    if (li.matches()) {
+      flush(out, para);
+      int depth = Math.min(li.group(1).length() / 2 + 1, lists.size() + 1);
+      String tag = Character.isDigit(li.group(2).charAt(0)) ? "ol" : "ul";
+      while (lists.size() > depth) {
+        out.append("</li></").append(lists.pop()).append(">");
       }
-      Files.createDirectories(siteDir);
-    }
-
-    static Map<String, String> readMetadata(String file) {
-      Map<String, String> variables = new HashMap<>();
-      try (BufferedReader reader = new BufferedReader(new StringReader(file))) {
-        // Use parallel stream to process lines in parallel
-        variables = reader.lines()
-            .parallel()
-            .filter(line -> line.startsWith("@"))
-            .map(line -> line.substring(1).split(" ", 2))
-            .collect(Collectors.toMap(
-                parts -> parts[0].replace("@", "").trim(),
-                parts -> parts.length > 1 ? parts[1].trim() : "",
-                (v1, v2) -> v1 // merge function in case of duplicate keys
-            ));
-      } catch (IOException e) {
-        e.printStackTrace();
+      if (lists.size() == depth)
+        out.append("</li>");
+      else {
+        lists.push(tag);
+        out.append("<").append(tag).append(">");
       }
-      return variables;
+      out.append("<li>").append(inline(li.group(3)));
+      continue;
     }
-
+    flush(out, para);
+    closeLists(out, lists);
+    if (line.matches("^(-{3,}|\\*{3,})\\s*$"))
+      out.append("<hr>\n");
+    else if (line.matches("^#{1,4}\\s+.*")) {
+      int n = line.indexOf(' ');
+      // # do corpo passa a h2: o h1 da página é o título.
+      out.append("<h%d>%s</h%d>\n".formatted(n + 1, inline(line.substring(n + 1).strip()), n + 1));
+    } else if (line.startsWith(">"))
+      out.append("<blockquote><p>").append(inline(line.replaceFirst("^>\\s?", ""))).append("</p></blockquote>\n");
+    else
+      para.append(para.isEmpty() ? "" : " ").append(line.strip());
   }
+  if (fence)
+    out.append("<pre><code>").append(esc(code.toString().stripTrailing())).append("</code></pre>\n");
+  flush(out, para);
+  closeLists(out, lists);
+  return out.toString();
+}
 
-  static class Render {
-     static void render(Path siteDir, List<DataSet.Post> posts, List<DataSet.Event> events,
-        List<DataSet.Member> members) throws Exception {
-      Path assetsDir = Paths.get("assets");
+void flush(StringBuilder out, StringBuilder para) {
+  if (!para.isEmpty())
+    out.append("<p>").append(inline(para.toString())).append("</p>\n");
+  para.setLength(0);
+}
 
-      // Gera index
-      String indexHtml = Utils.TemplateEngine.renderIndex(posts, events, members);
-      Files.writeString(siteDir.resolve("index.html"), indexHtml, StandardCharsets.UTF_8);
-      println("Index gerado.");
+void closeLists(StringBuilder out, Deque<String> lists) {
+  while (!lists.isEmpty())
+    out.append("</li></").append(lists.pop()).append(">\n");
+}
 
-      // Gera página com todos os posts
-      String allPostsHtml = Utils.TemplateEngine.renderAllPosts(posts);
-      Files.writeString(siteDir.resolve("all-posts.html"), allPostsHtml, StandardCharsets.UTF_8);
-      println("Página de todos os posts gerada.");
+String inline(String s) {
+  var codes = new ArrayList<String>();
+  var sb = new StringBuilder();
+  Matcher m = CODE.matcher(s);
+  while (m.find()) {
+    codes.add(esc(m.group(1)));
+    m.appendReplacement(sb, "\u0000" + (codes.size() - 1) + "\u0000");
+  }
+  m.appendTail(sb);
+  String t = esc(sb.toString());
+  t = IMG.matcher(t).replaceAll(r -> Matcher
+      .quoteReplacement("<img src=\"" + safeUrl(r.group(2)) + "\" alt=\"" + r.group(1) + "\" loading=\"lazy\">"));
+  t = LINK.matcher(t).replaceAll(r -> Matcher
+      .quoteReplacement("<a href=\"" + safeUrl(r.group(2)) + "\">" + r.group(1) + "</a>"));
+  t = BOLD.matcher(t).replaceAll("<strong>$1</strong>");
+  t = ITAL.matcher(t).replaceAll("<em>$1</em>");
+  return Pattern.compile("\u0000(\\d+)\u0000").matcher(t)
+      .replaceAll(r -> Matcher.quoteReplacement("<code>" + codes.get(Integer.parseInt(r.group(1))) + "</code>"));
+}
 
-      // Gera página com todos os Eventos
-      String allEventsHtml = Utils.TemplateEngine.renderAllEvents(events);
-      Files.writeString(siteDir.resolve("all-events.html"), allEventsHtml, StandardCharsets.UTF_8);
-      println("Página de todos os eventos gerada.");
+/** Só http(s), mailto, caminhos relativos e âncoras. Recebe texto já escapado ou cru. */
+String safeUrl(String u) {
+  String raw = u.replace("&amp;", "&").strip();
+  boolean ok = raw.matches("(?i)^(https?://|mailto:|/|\\.|#)[^\\s\"'<>]*$") || raw.matches("^[\\w-][^\\s:\"'<>]*$");
+  return ok ? esc(raw) : "#";
+}
 
-      // Gera página com todos os membros
-      String allMembersHtml = Utils.TemplateEngine.renderAllMembers(members);
-      Files.writeString(siteDir.resolve("all-members.html"), allMembersHtml, StandardCharsets.UTF_8);
-      println("Página de todos os membros gerada.");
+String esc(String s) {
+  return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;")
+      .replace("'", "&#39;");
+}
 
-      // Copia assets
-      if (Files.exists(assetsDir)) {
-        Files.walk(assetsDir).forEach(p -> {
-          try {
-            Path rel = assetsDir.relativize(p);
-            Path target = siteDir.resolve("assets").resolve(rel);
-            if (Files.isDirectory(p)) {
-              Files.createDirectories(target);
-            } else {
-              Files.createDirectories(target.getParent());
-              Files.copy(p, target, StandardCopyOption.REPLACE_EXISTING);
-            }
-          } catch (Exception e) {
-            throw new RuntimeException(e);
-          }
-        });
-        println("Assets copiados.");
-      }
+// ---------------------------------------------------------------- ficheiros
+
+void write(String rel, String html) throws IOException {
+  Path p = OUT.resolve(rel);
+  Files.createDirectories(p.getParent());
+  Files.writeString(p, html, StandardCharsets.UTF_8);
+}
+
+void clean(Path dir) throws IOException {
+  if (Files.exists(dir))
+    try (var s = Files.walk(dir)) {
+      s.sorted(Comparator.reverseOrder()).forEach(p -> p.toFile().delete());
+    }
+  Files.createDirectories(dir);
+}
+
+void copyAssets() throws IOException {
+  Path src = Path.of("assets");
+  try (var s = Files.walk(src)) {
+    for (Path p : s.toList()) {
+      Path t = OUT.resolve("assets").resolve(src.relativize(p).toString());
+      if (Files.isDirectory(p))
+        Files.createDirectories(t);
+      else
+        Files.copy(p, t, StandardCopyOption.REPLACE_EXISTING);
     }
   }
 }

@@ -1,42 +1,13 @@
-<article class="post-article">
-  <header class="article-header">
-    <h1>${post_title}</h1>
-    <div class="article-meta">
-      <span class="publish-date">Publicado em: ${post_date}</span>
-      <div class="social-share">
-        <span>Compartilhar:</span>
-        <a href="https://twitter.com/intent/tweet?text=${post_title}&url=[URL_DO_POST]" target="_blank" class="social-icon twitter">Twitter</a>
-        <a href="https://www.linkedin.com/sharing/share-offsite/?url=[URL_DO_POST]" target="_blank" class="social-icon linkedin">LinkedIn</a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u=[URL_DO_POST]" target="_blank" class="social-icon facebook">Facebook</a>
-      </div>
+<article>
+  <header class="page-head">
+    <div class="wrap narrow">
+      <p class="back"><a href="${root}all-posts.html">← Artigos</a></p>
+      <h1>${post_title}</h1>
+      <p class="byline">${post_author} · ${post_date} · ${post_minutes} min de leitura</p>
+      <ul class="tags">${post_tags}</ul>
     </div>
   </header>
-
-  <div class="article-content">
-    ${post_content}
+  <div class="wrap narrow prose">
+${post_html}
   </div>
-
-  <footer class="article-footer">
-    <div class="article-navigation">
-      <a href="${base_path}all-posts.html" class="btn btn-outline">← Voltar para todos os artigos</a>
-    </div>
-  </footer>
 </article>
-
-<section class="newsletter-cta">
-  <div class="container">
-    <h2>Junte-se à comunidade</h2>
-    <p>Acompanhe os próximos artigos e eventos nos nossos canais</p>
-    <div class="cta-buttons">
-      <a href="${base_path}index.html#contact" class="btn btn-primary">Entrar em Contato</a>
-    </div>
-  </div>
-</section>
-
-<script>
-  document.querySelectorAll('.social-icon').forEach(link => {
-    if (link.href.includes('[URL_DO_POST]')) {
-     link.href = link.href.replace('[URL_DO_POST]', encodeURIComponent(window.location.href));
-    }
-  });
-</script>

@@ -1,35 +1,17 @@
-<article class="event-article">
-  <header class="event-header">
-    <div class="event-badge">${event_type}</div>
-    <h1>${event_title}</h1>
-    <div class="event-meta">
-      <div class="meta-item">
-        <span class="meta-icon">📅</span>
-        <span class="meta-text">${event_date}</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-icon">📍</span>
-        <span class="meta-text">${event_location}</span>
+<article>
+  <header class="page-head">
+    <div class="wrap narrow">
+      <p class="back"><a href="${root}all-events.html">← Eventos</a></p>
+      <div class="ticket">
+        <span class="route-no big"><b>${event_day}</b><i>${event_mon}</i></span>
+        <div>
+          <h1>${event_title}</h1>
+          <p class="byline">${event_date} · ${event_location} · ${event_type}</p>
+        </div>
       </div>
     </div>
   </header>
-
-  <div class="event-content">
-    ${event_content}
-  </div>
-
-  <div class="event-actions">
-    <a href="${base_path}all-events.html" class="btn btn-outline">← Voltar para Eventos</a>
-    <div class="social-share">
-      <span>Compartilhar:</span>
-      <a href="#" class="social-icon">📋 Copiar Link</a>
-      <a href="#" class="social-icon">📧 Email</a>
-    </div>
-  </div>
-
-  <div class="event-cta">
-    <h2>Interessado em participar?</h2>
-    <p>Junte-se à nossa comunidade para receber atualizações sobre próximos eventos</p>
-    <a href="${base_path}index.html#contact" class="btn btn-primary">Entrar em Contato</a>
+  <div class="wrap narrow prose">
+${event_html}
   </div>
 </article>

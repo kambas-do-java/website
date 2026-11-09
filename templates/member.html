@@ -1,17 +1,18 @@
-<article class="member-article">
-  <header class="member-header">
-    <div class="member-avatar">
-      <img src="${member_avatar_url}" alt="${member_name}">
+<article>
+  <header class="page-head">
+    <div class="wrap narrow">
+      <p class="back"><a href="${root}all-members.html">← Membros</a></p>
+      <div class="ticket">
+        ${member_avatar}
+        <div>
+          <h1>${member_name}</h1>
+          <p class="byline">${member_role}</p>
+        </div>
+      </div>
+      <p class="links">${member_links}</p>
     </div>
-    <h1>${member_name}</h1>
-    ${member_social_links}
   </header>
-
-  <div class="member-content">
-    ${member_content}
-  </div>
-
-  <div class="member-actions">
-    <a href="${base_path}all-members.html" class="btn btn-outline">← Voltar para todos os membros</a>
+  <div class="wrap narrow prose">
+${member_html}
   </div>
 </article>
